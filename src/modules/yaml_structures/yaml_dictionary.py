@@ -2,6 +2,6 @@ from dataclasses import dataclass
 from typing import Union, List
 
 @dataclass
-class Dictionary:
+class YamlDictionary:
     key: str
-    value: Union[str, "Dictionary", List["Dictionary"]]  
+    value: Union[str, "YamlDictionary", List["YamlDictionary"]]  
