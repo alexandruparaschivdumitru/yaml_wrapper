@@ -11,6 +11,8 @@ from src.API.exceptions.key_not_found_exception import KeyNotFoundException
 from src.API.yaml_wrapper import YamlWrapper
 from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
 from src.modules.yaml_structures.yaml_list import YamlList
+from src.utils.file.enums.file_type import FileType
+from src.utils.file.file_utils import FileUtil
 
 class TestYamlWrapper(TestCase):
     def setUp(self) -> None:
@@ -116,9 +118,9 @@ class TestYamlWrapperIO(TestCase):
         
     def test_read_from_file(self):
         path_file: str = "tmp/yaml_file_populated.yaml"
-        self._create_file(path_file, {'name': 'value'})
+        FileUtil.create_file("tmp/", "yaml_file_populated", FileType.YAML, {'name': 'value'})
         read_from_file: YamlWrapper = YamlWrapper(path_file)
-        self._delete_file(path_file)
+        FileUtil.delete_file("tmp/yaml_file_populated.yaml")
         self.assertNotEqual(read_from_file.get_structure(), {})
         
         

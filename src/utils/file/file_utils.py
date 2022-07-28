@@ -1,0 +1,35 @@
+import os
+import os.path as path
+import yaml # type: ignore
+from typing import Any, Union
+
+from src.utils.file.enums.file_type import FileType
+from src.utils.file.exceptions.not_valid_file_content import NotValidFileContent
+
+
+
+class FileUtil:
+    @staticmethod
+    def create_file(file_path: str, file_name: str, file_type: FileType, file_content: Union[dict, str]) -> str:
+        if file_type == FileType.YAML:
+            if not isinstance(file_content, dict):
+                raise NotValidFileContent("The content for the file is not in the right format.")
+            with open(file_path + file_name + file_type.value, "w") as file:
+                documents = yaml.dump(file_content, file)
+                file.close()
+    
+        else:
+            if not isinstance(file_content, str):
+                raise NotValidFileContent("The content for the file is not in the right format.")
+            with open(file_path + file_name + file_type.value, "w") as file:
+                file.write(file_content)
+                file.close()
+                
+        return file_path + file_name + file_type.value 
+
+    @staticmethod
+    def delete_file(file_path: str) -> bool:
+        if path.isfile(file_path):
+            os.remove(file_path)
+            return True
+        raise FileNotFoundError("File " + file_path + " not exist.")

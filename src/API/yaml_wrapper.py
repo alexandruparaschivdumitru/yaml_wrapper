@@ -13,7 +13,7 @@ class YamlWrapper:
         Returns:
             dict: General structure.
         """
-        pass
+        return {}
     def get_keys(self) -> list:
         """Returns a list of all keys in yaml file.
 
