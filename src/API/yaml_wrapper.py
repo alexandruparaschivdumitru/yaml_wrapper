@@ -1,4 +1,4 @@
-from typing import Any, List, Union
+from typing import Any, List, Union, cast
 from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
 from src.modules.yaml_structures.yaml_list import YamlList
 
@@ -32,7 +32,7 @@ class YamlWrapper:
         Returns:
             YamlDictionary: Created dictionary.
         """
-        pass
+        return cast(YamlDictionary, {})
     
     def remove_dictionary(self, filter: str) -> YamlDictionary:
         """Remove a dictionary. 
