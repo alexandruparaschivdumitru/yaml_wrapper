@@ -1,10 +1,25 @@
-from typing import Any, Union
+from typing import Any, List, Union
 from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
 from src.modules.yaml_structures.yaml_list import YamlList
 
 
 class YamlWrapper:
     def __init__(self, file_name: str) -> None:
+        pass
+    
+    def get_structure(self) -> dict:
+        """Returns general structure of yaml file.
+
+        Returns:
+            dict: General structure.
+        """
+        pass
+    def get_keys(self) -> list:
+        """Returns a list of all keys in yaml file.
+
+        Returns:
+            list: List of all keys.
+        """
         pass
     
     def create_dictionary(self, key: str, value: Union[str, YamlDictionary]) -> YamlDictionary:
@@ -19,30 +34,32 @@ class YamlWrapper:
         """
         pass
     
-    def remove_dictionary(self, key: str) -> YamlDictionary:
+    def remove_dictionary(self, filter: str) -> YamlDictionary:
         """Remove a dictionary. 
 
         Args:
-            key (str): Key of the dictionry to remove.
+            filter (str): Filter to determinate which dictionary remove.
 
         Returns:
             YamlDictionary: Dictionary removed.
         """
         pass
     
-    def get_value(self) -> Union[YamlDictionary, YamlList]:
+    def get_value(self, key: str) -> Union[YamlDictionary, YamlList]:
         """Returns the value of a dictionary
+        
+        Args:
+            key: Key of dictionary to return.
 
         Returns:
             Union[YamlDictionary, YamlList]: Value returned.
         """
         pass
     
-    def modify_dictionary(self, key: str,  filter: Any, new_value: Union[str, YamlDictionary, YamlList], new: bool = True) -> YamlDictionary:
+    def modify_dictionary(self, filter: Any, new_value: Union[str, YamlDictionary, YamlList], new: bool = True) -> YamlDictionary:
         """Modify dictionary. The valaue to modify is determined using the filter.
 
         Args:
-            key (str): Key of the dictionary
             filter (Any): Filter criteria
             new_value (Union[str, YamlDictionary, YamlList]): Update value
             new (bool): If True returns the modified dictinary, else returns the old.
@@ -52,7 +69,7 @@ class YamlWrapper:
         """
         pass
 
-    def create_new_list(self, value: Union[YamlDictionary, YamlList]) -> YamlList:
+    def create_new_list(self, value: Union[List[YamlDictionary], YamlList]) -> YamlList:
         """Creates a new list.
 
         Args:
