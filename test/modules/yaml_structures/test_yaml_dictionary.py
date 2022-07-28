@@ -5,25 +5,25 @@ from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
 
 class TestYamlDictionary(TestCase):
     def test_name(self):
-        data: YamlDictionary = YamlDictionary("name", "Uniud")
+        data: YamlDictionary = YamlDictionary("name", "value")
         self.assertEqual(data.key, "name")
         
     def test_value(self):
-        data: YamlDictionary = YamlDictionary("name", "Uniud")
-        self.assertEqual(data.value, "Uniud")
+        data: YamlDictionary = YamlDictionary("name", "value")
+        self.assertEqual(data.value, "value")
     
     def test_value_type_str(self):
-        data: YamlDictionary = YamlDictionary("name", "Uniud")
+        data: YamlDictionary = YamlDictionary("name", "value")
         self.assertIsInstance(data.value, str)
         
     def test_value_type_yaml_dictionary(self):
-        data_1: YamlDictionary = YamlDictionary("name", "Uniud")
+        data_1: YamlDictionary = YamlDictionary("name", "value")
         data: YamlDictionary = YamlDictionary("name", data_1)
         self.assertIsInstance(data.value, YamlDictionary)
     
     def test_value_type_yaml_list(self):
-        data_1: YamlDictionary = YamlDictionary("name", "Uniud")
-        data_2: YamlDictionary = YamlDictionary("name_2", "Uniud_")
+        data_1: YamlDictionary = YamlDictionary("name", "value")
+        data_2: YamlDictionary = YamlDictionary("name_2", "value_2")
         list_data: List[YamlDictionary] = [data_1, data_2]
         data: YamlDictionary = YamlDictionary("name", list_data)
         self.assertIsInstance(data.value, list)
@@ -32,7 +32,7 @@ class TestYamlDictionary(TestCase):
     
 # Data structures tested:
 # ==============================
-# name: Argos - UniUD Sailing Lab
+# name: value
 # ------------------------------
 # Converted in ADT:
 # data = {key : "name",
