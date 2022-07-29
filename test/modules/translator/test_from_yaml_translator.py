@@ -26,20 +26,19 @@ class TestFromYamlTraslator(TestCase):
                                    'serials': [{'label': 'Chinese_GPS', 'speed': 9600, 'address': '/dev/ttyACM0'}],
                                    'server': {'host': 'localhost', 'port': 4545}}
         
-        file: TextIOWrapper = open(self.file_path + self.file_name + self.file_type.value, "r") #TODO: handle the problem with the file close.
-        traslator: FromYamlTraslator = FromYamlTraslator(file) # TODO: Change to a ChainMap
-        file.close()
-        content_traslated: dict = {1: YamlDictionary("name", "value"),
-                                   2: YamlDictionary("serials",YamlList([[YamlDictionary("label", "Chinese_GPS"),
-                                                                       YamlDictionary("speed", 9600),
-                                                                       YamlDictionary("address", "/dev/ttyACM0")]]
+        file: TextIOWrapper = open(self.file_path + self.file_name + self.file_type.value, "r")
+        traslator: FromYamlTraslator = FromYamlTraslator(file)
+        
+        content_traslated: dict = [ YamlDictionary("name", "value"),
+                                    YamlDictionary("serials",YamlList([[
+                                                                        YamlDictionary("address", "/dev/ttyACM0"),
+                                                                        YamlDictionary("label", "Chinese_GPS"),
+                                                                        YamlDictionary("speed", 9600)]]
                                                                     )
                                                 ),
-                                   3: YamlDictionary("server", [YamlDictionary("host", "localhost"),
+                                    YamlDictionary("server", [YamlDictionary("host", "localhost"),
                                                              YamlDictionary("port", 4545)])
-                                   }
-        
-        #print(content_traslated)
-        for i in range (1,4):
-            print(content_traslated[i].key)
-        self.assertNotEqual(traslator.translate(), content_traslated)
+                                    ]
+   
+        # NOTE: This test can fail due to the order of "serials" value.
+        self.assertEqual(traslator.translate(), content_traslated)
