@@ -1,4 +1,9 @@
 from io import TextIOWrapper
+from yaml import dump as upload_data # type: ignore
+from yaml import Dumper
+from yaml import YAMLError
+
+from src.modules.translators.exceptions.writing_yaml_exception import WritingYamlException
 
 
 class ToYamlTranslator:
@@ -18,4 +23,11 @@ class ToYamlTranslator:
             dict: Content translated in the format accepted by yaml library.
         """
         pass
+    
+    def _write_to_file(self, content_to_write: dict) -> None:
+        try:
+            upload_data(content_to_write, self._file, Dumper)
+        except YAMLError:
+            raise WritingYamlException("Error writing the content to the yaml file.")
+    
     

@@ -1,12 +1,10 @@
 from io import TextIOWrapper
-import re
 from yaml import load as download_data # type: ignore
-from yaml import dump as upload_data # type: ignore
-from yaml import Loader, Dumper # type: ignore
-from typing import Union, List, Any
+from yaml import Loader # type: ignore
+from typing import List, Any
 
 from src.modules.translators.enums.rule_type import ListRuleType, RuleType
-from src.modules.translators.exceptions.rule_not_found_exception import RuleNotFoundException
+from src.modules.translators.utils.rule_util import RuleFromValueUtil
 from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
 from src.modules.yaml_structures.yaml_list import YamlList
 
@@ -43,26 +41,6 @@ class FromYamlTraslator:
         
         return data_from_file
     
-    def _define_rule_from_value(self, value: Union[int, str, dict, list]) -> RuleType:
-        
-        if isinstance(value, int):
-            return RuleType.INT_RULE
-        elif isinstance(value, str):
-            return RuleType.STR_RULE
-        elif isinstance(value, dict):
-            return RuleType.LIST_DICT_RULE
-        elif isinstance(value, list):
-            return RuleType.LIST_RULE
-        else:
-            raise RuleNotFoundException("Not able to find a valid rule.")
-    
-    def _define_list_rule_type_from_value(self, value: List[Union[dict, Any ]]) -> ListRuleType:
-        first_element: Union[dict, Any ] = value[0]
-        if isinstance(first_element, dict):
-            return ListRuleType.DICT_TYPE
-        
-        return ListRuleType.OTHER_TYPE
-
     def _convert_dict_keys_to_dict(self, keys: Any) -> list:
         dict_keys_accumulator: list = []
         for key in keys:
@@ -78,7 +56,7 @@ class FromYamlTraslator:
             
             first_key: str = keys[0]
             
-            rule_to_apply: RuleType = self._define_rule_from_value(data[first_key])
+            rule_to_apply: RuleType = RuleFromValueUtil.define_rule_from_value(data[first_key])
             
             if rule_to_apply == RuleType.INT_RULE or rule_to_apply == RuleType.STR_RULE:
                 returned_value.append(YamlDictionary(first_key, data[first_key]))
@@ -90,7 +68,7 @@ class FromYamlTraslator:
             
             elif rule_to_apply == RuleType.LIST_RULE:
                 data_copy = data[first_key]
-                list_type: ListRuleType = self._define_list_rule_type_from_value(data_copy)
+                list_type: ListRuleType = RuleFromValueUtil.define_list_rule_type_from_value(data_copy)
         
                 if list_type == ListRuleType.DICT_TYPE:
                     accumulator: List[Any] = []
