@@ -5,8 +5,8 @@ from yaml import dump as upload_data # type: ignore
 from yaml import Loader, Dumper # type: ignore
 from typing import Union, List, Any
 
-from src.modules.translator.enums.rule_type import ListRuleType, RuleType
-from src.modules.translator.exceptions.rule_not_found_exception import RuleNotFoundException
+from src.modules.translators.enums.rule_type import ListRuleType, RuleType
+from src.modules.translators.exceptions.rule_not_found_exception import RuleNotFoundException
 from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
 from src.modules.yaml_structures.yaml_list import YamlList
 

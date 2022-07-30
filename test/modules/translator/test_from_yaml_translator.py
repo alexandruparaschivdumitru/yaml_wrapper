@@ -1,7 +1,7 @@
 from io import TextIOWrapper
 from unittest import TestCase
 
-from src.modules.translator.from_yaml_traslator import FromYamlTraslator
+from src.modules.translators.from_yaml_traslator import FromYamlTraslator
 from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
 from src.modules.yaml_structures.yaml_list import YamlList
 from src.utils.file.enums.file_type import FileType
