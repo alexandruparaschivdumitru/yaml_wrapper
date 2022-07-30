@@ -1,6 +1,5 @@
 from io import TextIOWrapper
 from unittest import TestCase
-
 from src.modules.translators.from_yaml_traslator import FromYamlTraslator
 from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
 from src.modules.yaml_structures.yaml_list import YamlList
@@ -21,13 +20,9 @@ class TestFromYamlTraslator(TestCase):
         file_path: str = "tmp/traslator_file.yaml"
         FileUtil.delete_file(file_path)
     
-    def test_conversion(self):
-        token_to_traslate: dict = {'name': 'Argos - UniUD Sailing Lab',
-                                   'serials': [{'label': 'Chinese_GPS', 'speed': 9600, 'address': '/dev/ttyACM0'}],
-                                   'server': {'host': 'localhost', 'port': 4545}}
-        
+    def test_translate(self):
         file: TextIOWrapper = open(self.file_path + self.file_name + self.file_type.value, "r")
-        traslator: FromYamlTraslator = FromYamlTraslator(file)
+        translator: FromYamlTraslator = FromYamlTraslator(file)
         
         content_traslated: dict = [ YamlDictionary("name", "value"),
                                     YamlDictionary("serials",YamlList([[
@@ -41,4 +36,4 @@ class TestFromYamlTraslator(TestCase):
                                     ]
    
         # NOTE: This test can fail due to the order of "serials" value.
-        self.assertEqual(traslator.translate(), content_traslated)
+        self.assertEqual(translator.translate(), content_traslated)
