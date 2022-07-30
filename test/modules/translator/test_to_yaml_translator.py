@@ -21,6 +21,7 @@ class TestToYamlTranslator(TestCase):
     def tearDown(self) -> None:
         FileUtil.delete_file(self.file_path)
         
+        
     def test_translate(self):
         content_to_write: list = [
                                 YamlDictionary("name", "value"),
@@ -34,7 +35,7 @@ class TestToYamlTranslator(TestCase):
                                                              YamlDictionary("port", 4545)])
                                     ]
         
-        file: TextIOWrapper = open(self.file_path + self.file_name + self.file_type.value, "w")
+        file: TextIOWrapper = open(self.file_path, "w")
         translator: ToYamlTranslator = ToYamlTranslator(file)
         
         self.assertEqual(translator.translate(content_to_write), {'name': 'value',
@@ -54,12 +55,12 @@ class TestToYamlTranslator(TestCase):
                                                              YamlDictionary("port", 4545)])
                                     ]
         
-        file: TextIOWrapper = open(self.file_path + self.file_name + self.file_type.value, "w")
+        file: TextIOWrapper = open(self.file_path, "w")
         translator: ToYamlTranslator = ToYamlTranslator(file)
         translator.translate(content_to_write)
         
         file_read_content: dict = {}
-        with open(self.file_path + self.file_name + self.file_type.value, "r") as file_read:
+        with open(self.file_path, "r") as file_read:
                 file_read_content = download_data(file_read,Loader)
         
         self.assertEqual(file_read_content, {'name': 'value',

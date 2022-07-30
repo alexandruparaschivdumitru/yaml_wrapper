@@ -33,7 +33,7 @@ class FileUtil:
         if (file_type != FileType.YAML) and (file_type != FileType.TXT):
             raise NotSupportedFileExtensionException("The file type is not valid.")
         open(file_path + file_name + file_type.value, 'a').close()
-                
+             
         return file_path + file_name + file_type.value 
     
     @staticmethod
