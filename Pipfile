@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 pyyaml = "*"
+pdoc3 = "*"
+types-pyyaml = "*"
 
 [dev-packages]
 
