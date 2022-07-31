@@ -47,7 +47,8 @@ class ToYamlTranslator:
             
             if isinstance(first_object, YamlDictionary):
                 if isinstance(first_object.value, str) or isinstance(first_object.value, int):
-                    returned_value[first_object.key] = first_object.value
+                    
+                    returned_value[first_object.key] = first_object.value 
                     
                 elif isinstance(first_object.value, list) and isinstance(first_object.value[0], YamlDictionary):
                    
@@ -59,7 +60,7 @@ class ToYamlTranslator:
                 return  self._apply_rule_rec(objects, returned_value)
             else:
                 if  isinstance(first_object, YamlList) and  isinstance(first_object.values[0], YamlDictionary):
-                   
+                    
                     return [self._apply_rule_rec(first_object.values, {})]
                 else:
                     return first_object.values

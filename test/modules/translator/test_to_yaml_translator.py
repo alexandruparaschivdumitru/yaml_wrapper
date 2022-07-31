@@ -67,3 +67,17 @@ class TestToYamlTranslator(TestCase):
         self.assertEqual(file_read_content, {'name': 'value',
                                    'serials': [{'label': 'Chinese_GPS', 'speed': 9600, 'address': '/dev/ttyACM0'}],
                                    'server': {'host': 'localhost', 'port': 4545}})
+        
+        
+    def test_write_list(self):
+        content_to_write: list = [YamlList([1, 2, 3, 4])]
+            
+        file: TextIOWrapper = open(self.file_path, "w")
+        translator: ToYamlTranslator = ToYamlTranslator(file)
+        translator.translate(content_to_write)
+        
+        file_read_content: dict = {}
+        with open(self.file_path, "r") as file_read:
+            file_read_content = download_data(file_read,Loader)
+            
+        self.assertEqual(file_read_content, [1, 2, 3, 4])
