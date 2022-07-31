@@ -25,10 +25,10 @@ class TestToYamlTranslator(TestCase):
     def test_translate(self):
         content_to_write: list = [
                                 YamlDictionary("name", "value"),
-                                YamlDictionary("serials",YamlList([[
+                                YamlDictionary("serials",YamlList([
                                                                         YamlDictionary("address", "/dev/ttyACM0"),
                                                                         YamlDictionary("label", "Chinese_GPS"),
-                                                                        YamlDictionary("speed", 9600)]]
+                                                                        YamlDictionary("speed", 9600)]
                                                                     )
                                                 ),
                                 YamlDictionary("server", [YamlDictionary("host", "localhost"),
@@ -37,18 +37,19 @@ class TestToYamlTranslator(TestCase):
         
         file: TextIOWrapper = open(self.file_path, "w")
         translator: ToYamlTranslator = ToYamlTranslator(file)
+        translated = translator.translate(content_to_write)
         
-        self.assertEqual(translator.translate(content_to_write), {'name': 'value',
+        self.assertEqual(translated, {'name': 'value',
                                    'serials': [{'label': 'Chinese_GPS', 'speed': 9600, 'address': '/dev/ttyACM0'}],
                                    'server': {'host': 'localhost', 'port': 4545}})
         
     def test_correct_write_in_yaml_file(self):
         content_to_write: list = [
                                 YamlDictionary("name", "value"),
-                                YamlDictionary("serials",YamlList([[
+                                YamlDictionary("serials",YamlList([
                                                                         YamlDictionary("address", "/dev/ttyACM0"),
                                                                         YamlDictionary("label", "Chinese_GPS"),
-                                                                        YamlDictionary("speed", 9600)]]
+                                                                        YamlDictionary("speed", 9600)]
                                                                     )
                                                 ),
                                 YamlDictionary("server", [YamlDictionary("host", "localhost"),
@@ -61,8 +62,8 @@ class TestToYamlTranslator(TestCase):
         
         file_read_content: dict = {}
         with open(self.file_path, "r") as file_read:
-                file_read_content = download_data(file_read,Loader)
-        
+            file_read_content = download_data(file_read,Loader)
+            
         self.assertEqual(file_read_content, {'name': 'value',
                                    'serials': [{'label': 'Chinese_GPS', 'speed': 9600, 'address': '/dev/ttyACM0'}],
                                    'server': {'host': 'localhost', 'port': 4545}})

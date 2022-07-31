@@ -48,7 +48,13 @@ class FromYamlTraslator:
         
         return dict_keys_accumulator
             
-    def _apply_rule_rec(self, keys: List[str], data: dict, returned_value: list ) -> list:  
+    def _apply_rule_rec(self, keys: List[str], data: dict, returned_value: list ) -> list:
+        # TODO: handle the case 
+        # """
+        # - item 1
+        # - item 2
+        # - item 3
+        # """  
            
         if len(keys) == 0:
              return returned_value
