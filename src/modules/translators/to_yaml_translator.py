@@ -13,8 +13,9 @@ from src.modules.yaml_structures.yaml_list import YamlList
 class ToYamlTranslator:
     """Translator from the format of Yaml wrapper, to the format of yaml library.
     """
-    def __init__(self , file: TextIOWrapper) -> None:
-        self._file: TextIOWrapper = file
+    def __init__(self , file_path: str) -> None:
+        self._file_path: str = file_path
+        self._file = open(file_path, "w")
         
     def __del__(self):
         self._file.close()

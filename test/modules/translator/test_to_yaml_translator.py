@@ -35,8 +35,7 @@ class TestToYamlTranslator(TestCase):
                                                              YamlDictionary("port", 4545)])
                                     ]
         
-        file: TextIOWrapper = open(self.file_path, "w")
-        translator: ToYamlTranslator = ToYamlTranslator(file)
+        translator: ToYamlTranslator = ToYamlTranslator(self.file_path)
         translated = translator.translate(content_to_write)
         
         self.assertEqual(translated, {'name': 'value',
@@ -56,8 +55,7 @@ class TestToYamlTranslator(TestCase):
                                                              YamlDictionary("port", 4545)])
                                     ]
         
-        file: TextIOWrapper = open(self.file_path, "w")
-        translator: ToYamlTranslator = ToYamlTranslator(file)
+        translator: ToYamlTranslator = ToYamlTranslator(self.file_path)
         translator.translate(content_to_write)
         
         file_read_content: dict = {}
@@ -72,8 +70,7 @@ class TestToYamlTranslator(TestCase):
     def test_write_list(self):
         content_to_write: list = [YamlList([1, 2, 3, 4])]
             
-        file: TextIOWrapper = open(self.file_path, "w")
-        translator: ToYamlTranslator = ToYamlTranslator(file)
+        translator: ToYamlTranslator = ToYamlTranslator(self.file_path)
         translator.translate(content_to_write)
         
         file_read_content: dict = {}
