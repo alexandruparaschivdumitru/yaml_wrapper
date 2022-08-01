@@ -2,6 +2,7 @@ from io import TextIOWrapper
 from yaml import load as download_data # type: ignore
 from yaml import Loader # type: ignore
 from typing import List, Any
+from typing import cast
 
 from src.modules.translators.enums.rule_type import ListRuleType, RuleType
 from src.modules.translators.utils.rule_util import RuleFromValueUtil
@@ -12,8 +13,10 @@ from src.modules.yaml_structures.yaml_list import YamlList
 class FromYamlTraslator:
     """ Translator from the format of yaml library, to the format accepeted from the YamlWrapper
     """
-    def __init__(self , file: TextIOWrapper) -> None:
-        self._file: TextIOWrapper = file
+    def __init__(self , file_path: str) -> None:
+        self._file_path: str = file_path
+        self._file = open(file_path, "r")
+        
         
     def __del__(self):
         self._file.close()

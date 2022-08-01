@@ -8,21 +8,21 @@ from src.utils.file.file_utils import FileUtil
 
 class TestFromYamlTraslator(TestCase):
     def setUp(self) -> None:
-        self.file_path: str = "tmp/"
+        self.file_directory: str = "tmp/"
         self.file_name: str = "traslator_file"
         self.file_type: FileType = FileType.YAML
+        self.file_path: str = self.file_directory + self.file_name + self.file_type.value
         self.file_content: dict = {'name': 'value',
                                    'serials': [{'label': 'Chinese_GPS', 'speed': 9600, 'address': '/dev/ttyACM0'}],
                                    'server': {'host': 'localhost', 'port': 4545}}
-        FileUtil.create_file(self.file_path, self.file_name, self.file_type, self.file_content)
+        FileUtil.create_file(self.file_directory, self.file_name, self.file_type, self.file_content)
     
     def tearDown(self) -> None:
-        file_path: str = "tmp/traslator_file.yaml"
-        FileUtil.delete_file(file_path)
+        
+        FileUtil.delete_file(self.file_path)
     
     def test_translate(self):
-        file: TextIOWrapper = open(self.file_path + self.file_name + self.file_type.value, "r")
-        translator: FromYamlTraslator = FromYamlTraslator(file)
+        translator: FromYamlTraslator = FromYamlTraslator(self.file_directory + self.file_name + self.file_type.value)
         
         content_traslated: dict = [ YamlDictionary("name", "value"),
                                     YamlDictionary("serials",YamlList([[
