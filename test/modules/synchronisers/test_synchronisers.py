@@ -1,4 +1,5 @@
 from unittest import TestCase
+from src.modules.synchronisers.exceptions.not_synchronisable_object_exception import NotSynchronisableObjectException
 from src.modules.synchronisers.synchroniser import Synchroniser
 from src.modules.translators.from_yaml_traslator import FromYamlTraslator
 from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
@@ -36,4 +37,12 @@ class TestSynchroniser(TestCase):
         file_synchronised_content: list = from_yaml_traslator.translate()
         FileUtil.delete_file(file_synchronised_path)
         
-        self.assertEqual(file_synchronised_content, self.file_content)
+        self.assertEqual(file_synchronised_content, [YamlDictionary(key='key', value='value')])
+        
+    def test_check_if_content_is_synchronizable(self):
+        synchroniser: Synchroniser = Synchroniser(self.file_path)
+        
+        not_sync_content: list = [{"key": "key", "value":"value"}]
+        
+        with self.assertRaises(NotSynchronisableObjectException):
+            synchroniser.synchronise(not_sync_content)
