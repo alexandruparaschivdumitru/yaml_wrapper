@@ -27,7 +27,12 @@ class FileUtil:
                 file.close()
                 
         return file_path + file_name + file_type.value 
-
+    
+    @staticmethod
+    def create_file_from_path(file_path: str):
+        open(file_path, 'a').close()
+        return file_path 
+    
     @staticmethod
     def create_empty_file(file_path: str, file_name: str, file_type: FileType,) -> str:
         if (file_type != FileType.YAML) and (file_type != FileType.TXT):
