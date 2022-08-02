@@ -17,19 +17,22 @@ class TestSpecificOperationsModificationHandlers(TestCase):
         FileUtil.delete_file(self.file_path)
     
     def test_update_dict(self) -> None:
-        upload_data(self.file_path, {"key": "value"}, Dumper)
+        with open(self.file_path, "w") as file:
+            upload_data({"key": "value"}, file, Dumper)
         self.modification_handler.load()
         
         self.assertEqual(self.modification_handler.update("key", "value_new"), [YamlDictionary("key", "value_new")])
     
     def test_update_dict_with_dict(self) -> None:
-        upload_data(self.file_path, {"key": [{"host": "localhost"}, {"port": 4545}]}, Dumper)
+        with open(self.file_path, "w") as file:
+            upload_data({"key": [{"host": "localhost"}, {"port": 4545}]},file, Dumper)
         self.modification_handler.load()
         
         self.assertEqual(self.modification_handler.update("key.port", 4546), [YamlDictionary("key", [YamlDictionary("host", "localhost"),
                                                                                                      YamlDictionary("port", 4546)])])
     def test_update_list(self) -> None:
-        upload_data(self.file_path, {"key": [[{"address_1": "address_value"}, {"label_1": "label_value"} , {"speed_1": "speed_value"}]]}, Dumper)
+        with open(self.file_path, "w") as file:
+            upload_data({"key": [[{"address_1": "address_value"}, {"label_1": "label_value"} , {"speed_1": "speed_value"}]]}, file, Dumper)
         self.modification_handler.load()
         
         self.assertEqual(self.modification_handler.update("key.[].address_1", "address_value_new"), [YamlDictionary("key", 
@@ -38,8 +41,9 @@ class TestSpecificOperationsModificationHandlers(TestCase):
                                                                                                               YamlDictionary("speed_1", "address_value"),
                                                                                                               ]))])
     def test_update_list_with_new_item(self) -> None:
-        upload_data(self.file_path, {"key": [[{"address_1": "address_value"}, {"label_1": "label_value"} , {"speed_1": "speed_value"}],
-                                            ]}, Dumper)
+        with open(self.file_path, "w") as file:
+            upload_data({"key": [[{"address_1": "address_value"}, {"label_1": "label_value"} , {"speed_1": "speed_value"}],
+                                            ]},file ,  Dumper)
         self.modification_handler.load()
         
         self.assertEqual(self.modification_handler.update("key.[]", [
@@ -63,8 +67,9 @@ class TestSpecificOperationsModificationHandlers(TestCase):
                                                                 )
         
     def test_remove_from_list(self) -> None:
-        upload_data(self.file_path, {"key": [[{"address_1": "address_value"}, {"label_1": "label_value"} , {"speed_1": "speed_value"}],
-                                             [{"address_2": "address_value"}, {"label_2": "label_value"} , {"speed_2": "speed_value"}]]}, Dumper)
+        with open(self.file_path, "w") as file:
+            upload_data({"key": [[{"address_1": "address_value"}, {"label_1": "label_value"} , {"speed_1": "speed_value"}],
+                                             [{"address_2": "address_value"}, {"label_2": "label_value"} , {"speed_2": "speed_value"}]]}, file, Dumper)
         self.modification_handler.load()
         
          
@@ -85,8 +90,9 @@ class TestSpecificOperationsModificationHandlers(TestCase):
                                                                 )
         
     def test_remove_item_from_list(self) -> None:
-        upload_data(self.file_path, {"key": [[{"address_1": "address_value"}, {"label_1": "label_value"} , {"speed_1": "speed_value"}],
-                                             [{"address_2": "address_value"}, {"label_2": "label_value"} , {"speed_2": "speed_value"}]]}, Dumper)
+        with open(self.file_path, "w") as file:
+            upload_data(self.file_path, {"key": [[{"address_1": "address_value"}, {"label_1": "label_value"} , {"speed_1": "speed_value"}],
+                                             [{"address_2": "address_value"}, {"label_2": "label_value"} , {"speed_2": "speed_value"}]]}, file, Dumper)
         self.modification_handler.load()
         self.modification_handler.remove("key.[].address_2", "address_value_new")
         self.modification_handler.remove("key.[].label_2", "address_value")
@@ -105,7 +111,8 @@ class TestSpecificOperationsModificationHandlers(TestCase):
                                                                 )
     
     def remove_dict(self) -> None:
-        upload_data(self.file_path, {"key": "value"}, Dumper)
+        with open(self.file_path, "w") as file:
+            upload_data({"key": "value"}, file, Dumper)
         self.modification_handler.load()
         
         self.assertEqual(self.modification_handler.remove("key"), [])
