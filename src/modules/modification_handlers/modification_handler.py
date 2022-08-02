@@ -32,5 +32,5 @@ class ModificationHandler:
     def update(self, filter: str, update_data: Union[int, str, YamlDictionary, YamlList, List[YamlDictionary], List[YamlList]]) -> list:
         pass
     
-    def remove(self, filter: str) -> list:
+    def remove(self, filter: str, value: str = "") -> list:
         pass

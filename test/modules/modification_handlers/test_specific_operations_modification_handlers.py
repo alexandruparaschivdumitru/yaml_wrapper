@@ -61,25 +61,52 @@ class TestSpecificOperationsModificationHandlers(TestCase):
                                                                                     )
                                                                     ]
                                                                 )
-    # TODO: Test that remove one item from a list  
-    # def test_remove_from_list(self) -> None:
-    #     upload_data(self.file_path, {"key": [[{"address_1": "address_value"}, {"label_1": "label_value"} , {"speed_1": "speed_value"}],
-    #                                          [{"address_2": "address_value"}, {"label_2": "label_value"} , {"speed_2": "speed_value"}]]}, Dumper)
-    #     self.modification_handler.load()
+        
+    def test_remove_from_list(self) -> None:
+        upload_data(self.file_path, {"key": [[{"address_1": "address_value"}, {"label_1": "label_value"} , {"speed_1": "speed_value"}],
+                                             [{"address_2": "address_value"}, {"label_2": "label_value"} , {"speed_2": "speed_value"}]]}, Dumper)
+        self.modification_handler.load()
         
          
-    #     self.assertEqual(self.modification_handler.remove("key.[]", ), 
-    #                                                                 [YamlDictionary("key", 
-    #                                                                                 YamlList(
-    #                                                                                     [[YamlDictionary("address_2", "address_value_new"),
-    #                                                                                     YamlDictionary("label_2", "address_value"),
-    #                                                                                     YamlDictionary("speed_2", "address_value"),
-    #                                                                                     ],
-    #                                                                                     [YamlDictionary("address_1", "address_value_new"),
-    #                                                                                     YamlDictionary("label_1", "address_value"),
-    #                                                                                     YamlDictionary("speed_1", "address_value"),
-    #                                                                                     ]]
-    #                                                                                     )
-    #                                                                                 )
-    #                                                                 ]
-    #                                                             )
+        self.assertEqual(self.modification_handler.remove("key.[].address_2", "address_value_new"), 
+                                                                    [YamlDictionary("key", 
+                                                                                    YamlList(
+                                                                                        [[
+                                                                                        YamlDictionary("label_2", "address_value"),
+                                                                                        YamlDictionary("speed_2", "address_value"),
+                                                                                        ],
+                                                                                        [YamlDictionary("address_1", "address_value_new"),
+                                                                                        YamlDictionary("label_1", "address_value"),
+                                                                                        YamlDictionary("speed_1", "address_value"),
+                                                                                        ]]
+                                                                                        )
+                                                                                    )
+                                                                    ]
+                                                                )
+        
+    def test_remove_item_from_list(self) -> None:
+        upload_data(self.file_path, {"key": [[{"address_1": "address_value"}, {"label_1": "label_value"} , {"speed_1": "speed_value"}],
+                                             [{"address_2": "address_value"}, {"label_2": "label_value"} , {"speed_2": "speed_value"}]]}, Dumper)
+        self.modification_handler.load()
+        self.modification_handler.remove("key.[].address_2", "address_value_new")
+        self.modification_handler.remove("key.[].label_2", "address_value")
+         
+        self.assertEqual(self.modification_handler.remove("key.[].speed_2", "speed_value"), 
+                                                                    [YamlDictionary("key", 
+                                                                                    YamlList(
+                                                                                        [
+                                                                                        [YamlDictionary("address_1", "address_value_new"),
+                                                                                        YamlDictionary("label_1", "address_value"),
+                                                                                        YamlDictionary("speed_1", "address_value"),
+                                                                                        ]]
+                                                                                        )
+                                                                                    )
+                                                                    ]
+                                                                )
+    
+    def remove_dict(self) -> None:
+        upload_data(self.file_path, {"key": "value"}, Dumper)
+        self.modification_handler.load()
+        
+        self.assertEqual(self.modification_handler.remove("key"), [])
+        
