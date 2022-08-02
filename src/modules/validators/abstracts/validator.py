@@ -10,5 +10,5 @@ class Validator(metaclass=ABCMeta):
                 NotImplemented)
     
     @abstractmethod
-    def validate(self, function: Callable[[Any], bool]) -> bool:
+    def validate(self, value: str) -> bool:
         pass
