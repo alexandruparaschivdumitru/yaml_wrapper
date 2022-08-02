@@ -61,7 +61,9 @@ class ModificationHandler:
         if not self._path_validator.validate(filter):
             raise NotValidFilterException("The filter is not valid.")
         
-        return False
+        search_in_object: list = self._object.copy()
+        filter_splitted: list = filter.split(".")
+        return self._search_value_rec(filter_splitted, value, search_in_object, True)
         
     
     def update(self, filter: str, update_data: Union[int, str, YamlDictionary, YamlList, List[YamlDictionary], List[YamlList]]) -> list:
@@ -83,8 +85,7 @@ class ModificationHandler:
 
         Args:
             filter (str): Filter used to determine the position of the value.
-            value (str, optional): If the item to remove is from a `YamlList`, the value is used to filter between equal values, otherwise if the item is 
-                                   a `YamlDictionary` the content of value is ignored. Defaults to "".
+            value (str, optional): If the item to remove is from a `YamlList`, the value is used to filter between equal values, otherwise if the item is a `YamlDictionary` the content of value is ignored. Defaults to "".
 
         Returns:
             list: Copy of object with the item removed.
@@ -98,5 +99,5 @@ class ModificationHandler:
             raise NotSafeLoadException("The file is not loaded, and the safe load is enabled.")
         
 
-    def _search_value(self, filter: List[str], value: Union[str, int]) -> bool:
+    def _search_value_rec(self, filters: List[str], value: Union[str, int], search_in_objects: list, returned_value: bool) -> bool:
         pass
