@@ -109,7 +109,7 @@ class TestModificationHandlers(TestCase):
         self.modification_handler.load()
         
         self.assertFalse(self.modification_handler.check("key.sub_key_1A", "value_2A"))
-        
+           
     def test_check_and_controll_object(self):
         with open(self.file_path, "w") as file:
             upload_data({"key": {"sub_key_1A" : "value_1A"}
@@ -125,8 +125,9 @@ class TestModificationHandlers(TestCase):
         with open(self.file_path, "w") as file:
             upload_data({"key": "value"}, file, Dumper)
         self.modification_handler.load()
-        
-        self.assertEqual(self.modification_handler.update("key", "value_1"), [YamlDictionary("key", "value_1")])
+        value_ret  = self.modification_handler.update("key", "value_1")
+        value_ret.value = "value_2"
+        self.assertEqual(self.modification_handler._object, [YamlDictionary("key", "value_2")])
     
     def test_remove(self) -> None:
         with open(self.file_path, "w") as file:

@@ -1,8 +1,11 @@
 from typing import Any, List, Union, cast
 from src.modules.initialisers.initialiser import Initialiser
+from src.modules.modification_handlers.exceptions.filter_not_found_exception import FilterNotFoundException
 from src.modules.modification_handlers.exceptions.not_safe_load_exception import NotSafeLoadException
 from src.modules.modification_handlers.exceptions.not_valid_filter_exception import NotValidFilterException
+from src.modules.modification_handlers.exceptions.not_valid_update_exception import NotValidUpdateException
 from src.modules.modification_handlers.utils.searchers.value_by_path_boolean_searcher import ValueByPathBooleanSearcher
+from src.modules.modification_handlers.utils.searchers.value_by_path_reference_searcher import ValueByPathReferenceSearcher
 
 from src.modules.synchronisers.synchroniser import Synchroniser
 from src.modules.validators.yaml_object_path_validator import YamlObjectPathValidator
@@ -67,7 +70,7 @@ class ModificationHandler:
         return ValueByPathBooleanSearcher.search(filter_splitted, value, search_in_object)
         
     
-    def update(self, filter: str, update_data: Union[int, str, YamlDictionary, YamlList, List[YamlDictionary], List[YamlList]]) -> list:
+    def update(self, filter: str, update_data: Union[int, str, YamlDictionary, YamlList, List[YamlDictionary], List[YamlList]]) -> Any:
         """Updates a value in the file, using a filter to determine the position of the value.
 
         Args:
@@ -78,7 +81,21 @@ class ModificationHandler:
             list: Copy of object with updated value.
         """
         self._check_safe_load()
+        filter_splitted: list = filter.split(".")
+        #ValueByPathReferenceSearcher.search(filter_splitted, self._object)
+        try:
+            object_to_modify: Union[YamlDictionary, YamlList, None] = ValueByPathReferenceSearcher.search(filter_splitted, self._object)
+            if object_to_modify is None:
+                raise FilterNotFoundException("Filter not found.")
+        except Exception:
+            raise NotValidFilterException("The filter is not valid.")
         
+        self._check_if_update_is_valid(object_to_modify, update_data)
+
+        if isinstance(object_to_modify, YamlDictionary):
+            cast(YamlDictionary, object_to_modify).value = cast(Union[int, str, YamlDictionary, YamlList, List[YamlDictionary]], update_data)
+        else: 
+             cast(YamlList, object_to_modify).values = cast(Union[List[YamlDictionary], List[Any]],update_data)
         return self._object.copy()
     
     def remove(self, filter: str, value: str = "") -> list:
@@ -98,3 +115,25 @@ class ModificationHandler:
     def _check_safe_load(self) -> None:
         if not self._loaded and self._safe_load:
             raise NotSafeLoadException("The file is not loaded, and the safe load is enabled.")
+        
+    def _check_if_update_is_valid(self, 
+                                value_to_update: Union[YamlDictionary, YamlList], 
+                                update: Union[int, 
+                                              str, 
+                                              YamlDictionary, 
+                                              YamlList, 
+                                              List[YamlDictionary], 
+                                              List[YamlList], 
+                                              List[Any]]) -> None:
+        
+        if isinstance(value_to_update, YamlDictionary):
+            if not (isinstance(update, int) or
+                    isinstance(update, str) or
+                    isinstance(update, YamlDictionary) or
+                    isinstance(update, YamlList) or
+                    all(isinstance(item, YamlDictionary) for item in update)):
+                raise NotValidUpdateException("The update is not valid.")
+        else:
+            if not (isinstance(update, List)):
+                raise NotValidUpdateException("The update is not valid.")
+                   
