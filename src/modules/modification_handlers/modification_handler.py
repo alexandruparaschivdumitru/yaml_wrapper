@@ -118,9 +118,9 @@ class ModificationHandler:
                     raise Exception
                 
                 if isinstance(first_search_object, list):
-                    sub_returned_value: bool = True
+                    sub_returned_value: bool = False
                     for sub_item in first_search_object:
-                        sub_returned_value = self._search_value_rec([first_filter] + filters.copy(), value, [sub_item], True)
+                        sub_returned_value = sub_returned_value or self._search_value_rec([first_filter] + filters.copy(), value, [sub_item], True)
                     
                     return self._search_value_rec([], value, [], returned_value and sub_returned_value)
                 

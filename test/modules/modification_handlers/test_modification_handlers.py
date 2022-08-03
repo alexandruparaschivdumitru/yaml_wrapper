@@ -16,6 +16,7 @@ class TestModificationHandlers(TestCase):
         
     def tearDown(self) -> None:
         FileUtil.delete_file(self.file_path)
+        
     
     def test_safe_load(self) -> None:
         with open(self.file_path, "w") as file:
@@ -62,6 +63,52 @@ class TestModificationHandlers(TestCase):
         
         with self.assertRaises(NotValidFilterException):
             self.modification_handler.check("key.[1]", "value")
+        
+    def test_check_list_with_multiple_items_result_true(self):
+        with open(self.file_path, "w") as file:
+            upload_data({"key": [{"sub_key_1A" : "value_1A",
+                                  "sub_key_2A" : "value_2A",
+                                  "sub_key_3A" : "value_3A"},
+                                {"sub_key_1B" : "value_1B",
+                                  "sub_key_2B" : "value_2B",
+                                  "sub_key_3B" : "value_3B"}
+                                ]}, file, Dumper)
+        self.modification_handler.load()
+        
+        self.assertTrue(self.modification_handler.check("key.[].sub_key_1A", "value_1A"))
+    
+    def test_check_list_with_multiple_items_result_false(self):
+        with open(self.file_path, "w") as file:
+            upload_data({"key": [{"sub_key_1A" : "value_1A",
+                                  "sub_key_2A" : "value_2A",
+                                  "sub_key_3A" : "value_3A"},
+                                {"sub_key_1B" : "value_1B",
+                                  "sub_key_2B" : "value_2B",
+                                  "sub_key_3B" : "value_3B"}
+                                ]}, file, Dumper)
+        self.modification_handler.load()
+        
+        self.assertFalse(self.modification_handler.check("key.[].sub_key_1A", "value_2A"))
+        
+    def test_check_sub_dictionary_with_multiple_items_result_true(self):
+        with open(self.file_path, "w") as file:
+            upload_data({"key": {"sub_key_1A" : "value_1A",
+                                  "sub_key_2A" : "value_2A",
+                                  "sub_key_3A" : "value_3A"}
+                                }, file, Dumper)
+        self.modification_handler.load()
+        
+        self.assertTrue(self.modification_handler.check("key.sub_key_1A", "value_1A"))
+    
+    def test_check_sub_dictionary_with_multiple_items_result_false(self):
+        with open(self.file_path, "w") as file:
+            upload_data({"key": {"sub_key_1A" : "value_1A",
+                                  "sub_key_2A" : "value_2A",
+                                  "sub_key_3A" : "value_3A"}
+                                }, file, Dumper)
+        self.modification_handler.load()
+        
+        self.assertFalse(self.modification_handler.check("key.sub_key_1A", "value_2A"))
     
     def test_update(self) -> None:
         with open(self.file_path, "w") as file:
