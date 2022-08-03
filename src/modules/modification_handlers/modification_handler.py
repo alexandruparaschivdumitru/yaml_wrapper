@@ -2,6 +2,7 @@ from typing import Any, List, Union, cast
 from src.modules.initialisers.initialiser import Initialiser
 from src.modules.modification_handlers.exceptions.not_safe_load_exception import NotSafeLoadException
 from src.modules.modification_handlers.exceptions.not_valid_filter_exception import NotValidFilterException
+from src.modules.modification_handlers.utils.searchers.value_by_path_boolean_searcher import ValueByPathBooleanSearcher
 
 from src.modules.synchronisers.synchroniser import Synchroniser
 from src.modules.validators.yaml_object_path_validator import YamlObjectPathValidator
@@ -63,7 +64,7 @@ class ModificationHandler:
         
         search_in_object: list = self._object.copy()
         filter_splitted: list = filter.split(".")
-        return self._search_value_rec(filter_splitted, value, search_in_object, True)
+        return ValueByPathBooleanSearcher.search(filter_splitted, value, search_in_object)
         
     
     def update(self, filter: str, update_data: Union[int, str, YamlDictionary, YamlList, List[YamlDictionary], List[YamlList]]) -> list:
@@ -97,43 +98,3 @@ class ModificationHandler:
     def _check_safe_load(self) -> None:
         if not self._loaded and self._safe_load:
             raise NotSafeLoadException("The file is not loaded, and the safe load is enabled.")
-        
-
-    def _search_value_rec(self, filters: List[str], value: Union[str, int], search_in_objects: list, returned_value: bool) -> bool:
-        if len(filters) == 0:
-            if len(search_in_objects) > 0 :
-                first_search_object_str_int: str = search_in_objects.pop(0)
-                if ((isinstance(first_search_object_str_int, str) or isinstance(first_search_object_str_int, int)) and 
-                        (first_search_object_str_int == value)):
-                    return True
-                else:
-                    return False
-                
-            return returned_value
-        else:
-            first_filter: str = filters.pop(0)
-            first_search_object: Union[YamlDictionary, YamlList ] = search_in_objects.pop(0)
-            if first_filter != "[]":
-                if isinstance(first_search_object, YamlList):
-                    raise Exception
-                
-                if isinstance(first_search_object, list):
-                    sub_returned_value: bool = False
-                    for sub_item in first_search_object:
-                        sub_returned_value = sub_returned_value or self._search_value_rec([first_filter] + filters.copy(), value, [sub_item], True)
-                    
-                    return self._search_value_rec([], value, [], returned_value and sub_returned_value)
-                
-                elif isinstance(first_search_object, YamlDictionary) and first_search_object.key == first_filter:
-                    
-                    return self._search_value_rec(filters, value, [first_search_object.value], returned_value and True)
-                else:
-                    
-                    return self._search_value_rec(filters, value, [first_search_object], returned_value and False)
-                                  
-            else:
-                if first_filter == "[]":
-                    if not isinstance(first_search_object, YamlList):
-                        raise Exception
-               
-                return self._search_value_rec(filters, value, first_search_object.values, returned_value and True) # type: ignore
