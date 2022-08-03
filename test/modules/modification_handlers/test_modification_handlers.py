@@ -41,6 +41,13 @@ class TestModificationHandlers(TestCase):
         
         self.assertTrue(self.modification_handler.check("key", "value"))
     
+    def test_check_true_with_list(self) -> None:
+        with open(self.file_path, "w") as file:
+            upload_data({"key": [{"sub_key" : "value_1"}]}, file, Dumper)
+        self.modification_handler.load()
+        
+        self.assertTrue(self.modification_handler.check("key.[].sub_key", "value_1"))
+    
     def test_check_false(self) -> None:
         with open(self.file_path, "w") as file:
             upload_data({"key": "value"}, file, Dumper)
