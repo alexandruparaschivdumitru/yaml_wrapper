@@ -25,10 +25,10 @@ class ValueByPathReferenceSearcher:
                                                                            [cast(YamlDictionary, first_search_in_objects).value], 
                                                                            first_search_in_objects)
                 elif isinstance(first_search_in_objects, list):
-                    if ValueByPathReferenceSearcher._check_list_integrity(first_search_in_objects, YamlDictionary):
+                    if not ValueByPathReferenceSearcher._check_list_integrity(first_search_in_objects, YamlDictionary):
                         raise ListNotRespectIntegriry("Items in list not respect integrity: they not have the same type.")
                     for item in first_search_in_objects: 
-                        # TODO: check here
+                        # TODO: Finish implementation 
                         value_to_return = ValueByPathReferenceSearcher._search_recursion(filters.copy(),
                                                                            [cast(YamlDictionary, first_search_in_objects).value], 
                                                                            first_search_in_objects)

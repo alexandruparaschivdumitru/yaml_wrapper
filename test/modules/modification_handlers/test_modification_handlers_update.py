@@ -21,10 +21,8 @@ class TestModificationHandlersUpdate(TestCase):
         with open(self.file_path, "w") as file:
             upload_data({"key": "value"}, file, Dumper)
         self.modification_handler.load()
-        value_ret  = self.modification_handler.update("key", "value_1")
-        value_ret.value = "value_2"
         
-        self.assertEqual(self.modification_handler._object, [YamlDictionary("key", "value_2")])
+        self.assertEqual(self.modification_handler.update("key", "value_1"), [YamlDictionary("key", "value_1")])
     
     def test_update_dict(self) -> None:
         with open(self.file_path, "w") as file:
@@ -35,7 +33,8 @@ class TestModificationHandlersUpdate(TestCase):
     
     def test_update_dict_with_dict(self) -> None:
         with open(self.file_path, "w") as file:
-            upload_data({"key": [{"host": "localhost"}, {"port": 4545}]},file, Dumper)
+            upload_data({"key": {"host": "localhost",
+                                 "port": 4545}},file, Dumper)
         self.modification_handler.load()
         
         self.assertEqual(self.modification_handler.update("key.port", 4546), [YamlDictionary("key", [YamlDictionary("host", "localhost"),
