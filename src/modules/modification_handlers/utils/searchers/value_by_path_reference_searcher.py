@@ -27,15 +27,25 @@ class ValueByPathReferenceSearcher:
                 elif isinstance(first_search_in_objects, list):
                     if not ValueByPathReferenceSearcher._check_list_integrity(first_search_in_objects, YamlDictionary):
                         raise ListNotRespectIntegriry("Items in list not respect integrity: they not have the same type.")
-                    for item in first_search_in_objects: 
-                        # TODO: Finish implementation 
-                        value_to_return = ValueByPathReferenceSearcher._search_recursion(filters.copy(),
-                                                                           [cast(YamlDictionary, first_search_in_objects).value], 
-                                                                           first_search_in_objects)
                     
-                    return ValueByPathReferenceSearcher._search_recursion(filters, 
-                                                                          [cast(YamlDictionary, item).value],  
-                                                                          first_search_in_objects)
+                    value_to_return = None
+                    
+                    new_filters = [first_filter]
+                    new_filters.extend(filters.copy())
+                    
+                    for item in first_search_in_objects: 
+                        # TODO: Finish implementation
+                        
+                        value_from_searcher = ValueByPathReferenceSearcher._search_recursion(new_filters.copy(),
+                                                                           [cast(YamlDictionary, item)], 
+                                                                           None)
+                        if value_from_searcher is not None:
+                            value_to_return = value_from_searcher
+                            
+                    
+                    return ValueByPathReferenceSearcher._search_recursion([], 
+                                                                          [cast(YamlDictionary, value_to_return).value],  
+                                                                          value_to_return)
                 elif isinstance(first_search_in_objects, YamlList):
                     return  ValueByPathReferenceSearcher._search_recursion(filters,
                                                                            [cast(YamlDictionary, first_search_in_objects).value], 
@@ -47,7 +57,7 @@ class ValueByPathReferenceSearcher:
                     if not isinstance(first_search_in_objects, YamlList):
                         raise Exception
                 return ValueByPathReferenceSearcher._search_recursion(filters,
-                                                                           [cast(YamlList, first_search_in_objects).values], 
+                                                                           cast(YamlList, first_search_in_objects).values, 
                                                                            first_search_in_objects)
     
     @staticmethod
