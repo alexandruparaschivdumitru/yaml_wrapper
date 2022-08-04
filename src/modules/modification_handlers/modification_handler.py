@@ -70,7 +70,9 @@ class ModificationHandler:
         return ValueByPathBooleanSearcher.search(filter_splitted, value, search_in_object)
         
     
-    def update(self, filter: str, update_data: Union[int, str, YamlDictionary, YamlList, List[YamlDictionary], List[YamlList]]) -> Any:
+    def update(self, 
+               filter: str, 
+               update_data: Union[int, str, YamlDictionary, YamlList, List[YamlDictionary], List[List[YamlDictionary]],  List[YamlList]]) -> Any:
         """Updates a value in the file, using a filter to determine the position of the value.
 
         Args:
@@ -95,7 +97,9 @@ class ModificationHandler:
         if isinstance(object_to_modify, YamlDictionary):
             cast(YamlDictionary, object_to_modify).value = cast(Union[int, str, YamlDictionary, YamlList, List[YamlDictionary]], update_data)
         else: 
-             cast(YamlList, object_to_modify).values = cast(Union[List[YamlDictionary], List[Any]],update_data)
+            cast(YamlList, object_to_modify).values = cast(Union[List[YamlDictionary], List[Any]],update_data)
+        
+        self._synchroniser.synchronise(self._object.copy())
         return self._object.copy()
     
     def remove(self, filter: str, value: str = "") -> list:

@@ -28,7 +28,7 @@ class TestModificationHandlersUpdate(TestCase):
         with open(self.file_path, "w") as file:
             upload_data({"key": "value"}, file, Dumper)
         self.modification_handler.load()
-        
+
         self.assertEqual(self.modification_handler.update("key", "value_new"), [YamlDictionary("key", "value_new")])
     
     def test_update_dict_with_dict(self) -> None:
@@ -41,32 +41,28 @@ class TestModificationHandlersUpdate(TestCase):
                                                                                                      YamlDictionary("port", 4546)])])
     def test_update_list(self) -> None:
         with open(self.file_path, "w") as file:
-            upload_data({"key": [[{"address_1": "address_value"}, {"label_1": "label_value"} , {"speed_1": "speed_value"}]]}, file, Dumper)
+            upload_data({"key": [{"address_1": "address_value", "label_1": "label_value", "speed_1": "speed_value"}]}, file, Dumper)
         self.modification_handler.load()
         
         self.assertEqual(self.modification_handler.update("key.[].address_1", "address_value_new"), [YamlDictionary("key", 
-                                                                                                    YamlList([YamlDictionary("address_1", "address_value_new"),
-                                                                                                              YamlDictionary("label_1", "address_value"),
-                                                                                                              YamlDictionary("speed_1", "address_value"),
-                                                                                                              ]))])
+                                                                                                    YamlList([[YamlDictionary("address_1", "address_value_new"),
+                                                                                                              YamlDictionary("label_1", "label_value"),
+                                                                                                              YamlDictionary("speed_1", "speed_value"),
+                                                                                                              ]]))])
     def test_update_list_with_new_item(self) -> None:
         with open(self.file_path, "w") as file:
-            upload_data({"key": [[{"address_1": "address_value"}, {"label_1": "label_value"} , {"speed_1": "speed_value"}],
-                                            ]},file ,  Dumper)
+            upload_data({"key": [{"address_1": "address_value", "label_1": "label_value", "speed_1": "speed_value"}],
+                                },file ,  Dumper)
         self.modification_handler.load()
         
-        self.assertEqual(self.modification_handler.update("key.[]", [
+        self.assertEqual(self.modification_handler.update("key.[]", [[
                                                                     YamlDictionary("address_1", "address_value_new"),
                                                                     YamlDictionary("label_1", "address_value"),
                                                                     YamlDictionary("speed_1", "address_value"),
-                                                                    ]), 
+                                                                    ]]), 
                                                                     [YamlDictionary("key", 
                                                                                     YamlList(
-                                                                                        [[YamlDictionary("address_2", "address_value_new"),
-                                                                                        YamlDictionary("label_2", "address_value"),
-                                                                                        YamlDictionary("speed_2", "address_value"),
-                                                                                        ],
-                                                                                        [YamlDictionary("address_1", "address_value_new"),
+                                                                                        [[YamlDictionary("address_1", "address_value_new"),
                                                                                         YamlDictionary("label_1", "address_value"),
                                                                                         YamlDictionary("speed_1", "address_value"),
                                                                                         ]]

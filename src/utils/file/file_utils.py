@@ -30,14 +30,14 @@ class FileUtil:
     
     @staticmethod
     def create_file_from_path(file_path: str):
-        open(file_path, 'a').close()
+        open(file_path, 'w').close()
         return file_path 
     
     @staticmethod
     def create_empty_file(file_path: str, file_name: str, file_type: FileType,) -> str:
         if (file_type != FileType.YAML) and (file_type != FileType.TXT):
             raise NotSupportedFileExtensionException("The file type is not valid.")
-        open(file_path + file_name + file_type.value, 'a').close()
+        open(file_path + file_name + file_type.value, 'w').close()
              
         return file_path + file_name + file_type.value 
     
