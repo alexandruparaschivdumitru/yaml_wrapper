@@ -15,11 +15,6 @@ class ToYamlTranslator:
     """
     def __init__(self , file_path: str) -> None:
         self._file_path: str = file_path
-        self._file = open(file_path, "w")
-        
-    def __del__(self):
-        self._file.close()
-        
         
     def translate(self, content_to_translate: list) -> Union[dict, list]:
         """Translates the content of the YamlWrapper to the format of yaml library.
@@ -33,7 +28,8 @@ class ToYamlTranslator:
     
     def _write_to_file(self, content_to_write: Union[dict, list]) -> None:
         try:
-            upload_data(content_to_write, self._file, Dumper)
+            with open(self._file_path, "w") as file:
+                upload_data(content_to_write, file, Dumper)
         except YAMLError:
             raise WritingYamlException("Error writing the content to the yaml file.")
         
@@ -44,7 +40,7 @@ class ToYamlTranslator:
         if len(objects) == 0:
             return returned_value
         else:
-            first_object: Union[YamlDictionary, YamlList] = objects.pop(0)
+            first_object: Union[YamlDictionary, YamlList] = objects[0]
             
             if isinstance(first_object, YamlDictionary):
                 if isinstance(first_object.value, str) or isinstance(first_object.value, int):
@@ -58,11 +54,13 @@ class ToYamlTranslator:
                 else:
                     returned_value[first_object.key] = self._apply_rule_rec([first_object.value], {})
 
-                return  self._apply_rule_rec(objects, returned_value)
+                return  self._apply_rule_rec(objects[1:], returned_value)
             else:
                 if  isinstance(first_object, YamlList) and  isinstance(first_object.values[0], YamlDictionary):
+                    # BUG: Bad management of possible cases.
+                    partial_result = self._apply_rule_rec(first_object.values, {})
                     
-                    return [self._apply_rule_rec(first_object.values, {})]
+                    return [partial_result]
                 else:
                     return first_object.values
                 
