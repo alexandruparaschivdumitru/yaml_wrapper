@@ -78,3 +78,18 @@ class TestToYamlTranslator(TestCase):
             file_read_content = download_data(file_read,Loader)
             
         self.assertEqual(file_read_content, [1, 2, 3, 4])
+    
+    def test_translate_multiple_times(self):
+        content_to_write: list = [YamlList([1, 2, 3, 4])]
+            
+        translator: ToYamlTranslator = ToYamlTranslator(self.file_path)
+        translator.translate(content_to_write)
+        translator.translate(content_to_write)
+        translator.translate(content_to_write)
+        translator.translate(content_to_write)
+        
+        file_read_content: dict = {}
+        with open(self.file_path, "r") as file_read:
+            file_read_content = download_data(file_read,Loader)
+            
+        self.assertEqual(file_read_content, [1, 2, 3, 4])

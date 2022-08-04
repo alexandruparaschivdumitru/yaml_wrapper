@@ -15,11 +15,6 @@ class FromYamlTraslator:
     """
     def __init__(self , file_path: str) -> None:
         self._file_path: str = file_path
-        self._file = open(file_path, "r")
-        
-        
-    def __del__(self):
-        self._file.close()
         
     def translate(self)-> list:
         """Returns a dict in the right format for YamlWrapper, with the content of yaml file
@@ -37,7 +32,8 @@ class FromYamlTraslator:
         return rules_applied
     
     def _read_from_file(self) -> dict:
-        data_from_file: dict = download_data(self._file, Loader)
+        with open(self._file_path, "r") as file:
+            data_from_file: dict = download_data(file, Loader)
         
         if data_from_file is None:
             return {}
