@@ -32,11 +32,11 @@ class FromYamlTraslator:
         return rules_applied
     
     def _read_from_file(self) -> dict:
-        with open(self._file_path, "r") as file:
-            data_from_file: dict = download_data(file, Loader)
-        
-        if data_from_file is None:
-            return {}
+        try:
+            with open(self._file_path, "r") as file:
+                data_from_file: dict = download_data(file, Loader)
+        except OSError as error:
+            raise error
         
         return data_from_file
     
@@ -87,7 +87,7 @@ class FromYamlTraslator:
 
                 else:
                        
-                    returned_value.append(YamlDictionary(first_key, YamlList(data[first_key][item])))
+                    returned_value.append(YamlDictionary(first_key, YamlList(data[first_key])))
      
                  
         return self._apply_rule_rec(keys[1:], data, returned_value)            

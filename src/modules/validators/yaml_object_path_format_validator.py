@@ -3,7 +3,7 @@ from typing import Callable
 
 from src.modules.validators.abstracts.validator import Validator
 
-class YamlObjectPathValidator(Validator):
+class YamlObjectPathFormatValidator(Validator):
     def __init__(self) -> None:
        pass
    

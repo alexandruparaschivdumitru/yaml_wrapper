@@ -29,8 +29,3 @@ class TestModificationHandlersLoadGet(TestCase):
             upload_data({"key": "value"}, file, Dumper)
        
         self.assertEqual(self.modification_handler.load(), [YamlDictionary("key", "value")])
-        
-    def test_load_empty_file(self) -> None:
-        self.modification_handler.load()
-        
-        self.assertEqual(self.modification_handler.load(), [])

@@ -11,7 +11,7 @@ class Initialiser:
     def initialise(self) -> list:
         try:
             return self._from_yaml_traslator.translate()
-        except FileNotFoundError:
+        except OSError:
             if self._create_not_exitent_file:
                 FileUtil.create_file_from_path(self._file_path)
                 return self._from_yaml_traslator.translate()

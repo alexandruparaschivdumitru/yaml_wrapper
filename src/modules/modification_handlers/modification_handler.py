@@ -3,12 +3,15 @@ from src.modules.initialisers.initialiser import Initialiser
 from src.modules.modification_handlers.exceptions.filter_not_found_exception import FilterNotFoundException
 from src.modules.modification_handlers.exceptions.not_safe_load_exception import NotSafeLoadException
 from src.modules.modification_handlers.exceptions.not_valid_filter_exception import NotValidFilterException
+from src.modules.modification_handlers.exceptions.not_valid_remove_exception import NotValidRemoveException
 from src.modules.modification_handlers.exceptions.not_valid_update_exception import NotValidUpdateException
+from src.modules.modification_handlers.utils.searchers.object_by_path_reference_searcer import ObjectByPathReference
 from src.modules.modification_handlers.utils.searchers.value_by_path_boolean_searcher import ValueByPathBooleanSearcher
 from src.modules.modification_handlers.utils.searchers.value_by_path_reference_searcher import ValueByPathReferenceSearcher
 
 from src.modules.synchronisers.synchroniser import Synchroniser
-from src.modules.validators.yaml_object_path_validator import YamlObjectPathValidator
+from src.modules.validators.yaml_object_path_format_validator import YamlObjectPathFormatValidator
+from src.modules.validators.yaml_object_path_remove_validator import YamlObjectPathRemoveValidator
 from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
 from src.modules.yaml_structures.yaml_list import YamlList
 
@@ -28,7 +31,8 @@ class ModificationHandler:
         self._loaded: bool = False
         self._synchroniser: Synchroniser = Synchroniser(file_path)
         self._initialiser: Initialiser = Initialiser(file_path)
-        self._path_validator: YamlObjectPathValidator = YamlObjectPathValidator()
+        self._path_format_validator: YamlObjectPathFormatValidator = YamlObjectPathFormatValidator()
+        self._path_remove_validator: YamlObjectPathRemoveValidator = YamlObjectPathRemoveValidator()
         
     
     def load(self) -> list:
@@ -62,7 +66,7 @@ class ModificationHandler:
             bool: True if the value exist, False otherwise.
         """
         self._check_safe_load()
-        if not self._path_validator.validate(filter):
+        if not self._path_format_validator.validate(filter):
             raise NotValidFilterException("The filter is not valid.")
         
         search_in_object: list = self._object.copy()
@@ -83,8 +87,8 @@ class ModificationHandler:
             list: Copy of object with updated value.
         """
         self._check_safe_load()
+        self._path_format_validator.validate(filter)
         filter_splitted: list = filter.split(".")
-        #ValueByPathReferenceSearcher.search(filter_splitted, self._object)
         try:
             object_to_modify: Union[YamlDictionary, YamlList, None] = ValueByPathReferenceSearcher.search(filter_splitted, self._object)
             if object_to_modify is None:
@@ -113,6 +117,19 @@ class ModificationHandler:
             list: Copy of object with the item removed.
         """
         self._check_safe_load()
+        self._path_format_validator.validate(filter)
+        
+        
+        if not self._path_remove_validator.validate(filter):
+            raise NotValidRemoveException("The filter is not valid, for removing.")
+        
+        filter_splitted: list = filter.split(".")
+        try:
+            object_to_remove: Union[YamlDictionary, YamlList, None] = ObjectByPathReference.search(filter_splitted, self._object)
+            if object_to_remove is None:
+                raise FilterNotFoundException("Filter not found.")
+        except Exception:
+            raise NotValidFilterException("The filter is not valid.")
         
         return self._object.copy()
     
@@ -140,4 +157,3 @@ class ModificationHandler:
         else:
             if not (isinstance(update, List)):
                 raise NotValidUpdateException("The update is not valid.")
-                   

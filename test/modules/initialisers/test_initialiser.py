@@ -30,3 +30,4 @@ class TestInitialiser(TestCase):
         
         with self.assertRaises(FileNotFoundError):
             initialiser: Initialiser = Initialiser(file_not_existent_path)
+            initialiser.initialise()

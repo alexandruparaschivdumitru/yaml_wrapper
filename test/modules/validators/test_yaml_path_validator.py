@@ -1,10 +1,10 @@
 from unittest import TestCase
 
-from src.modules.validators.yaml_object_path_validator import YamlObjectPathValidator
+from src.modules.validators.yaml_object_path_format_validator import YamlObjectPathFormatValidator
 
 class TestYamlPathValidator(TestCase):
     def setUp(self) -> None:
-        self.validator: YamlObjectPathValidator = YamlObjectPathValidator()
+        self.validator: YamlObjectPathFormatValidator = YamlObjectPathFormatValidator()
         
     def test_validator_valid_string(self):
         string_to_validate: str = "first_value.second_value"

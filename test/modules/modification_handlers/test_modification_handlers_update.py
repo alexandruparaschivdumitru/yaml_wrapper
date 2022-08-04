@@ -70,4 +70,12 @@ class TestModificationHandlersUpdate(TestCase):
                                                                                     )
                                                                     ]
                                                                 )
-    
+        
+    def test_start_with_multiple_dicts(self):
+        with open(self.file_path, "w") as file:
+            upload_data({"key": 1,
+                         "key_2": 2
+                                },file ,  Dumper)
+        self.modification_handler.load()    
+        
+        self.assertEqual(self.modification_handler.update("key_2", 3), [YamlDictionary("key", 1), YamlDictionary("key_2", 3)])

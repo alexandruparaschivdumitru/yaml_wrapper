@@ -16,49 +16,60 @@ class ValueByPathReferenceSearcher:
         if len(filters) == 0:
             return returned_value
         else:
-            first_filter: str = filters.pop(0)
-            first_search_in_objects: Union[YamlDictionary, YamlList] = search_in_objects[0]
+            
+            for item in search_in_objects:
+                first_filter: str = filters[0]
 
-            if first_filter != "[]":
-                if isinstance(first_search_in_objects, YamlDictionary) and cast(YamlDictionary, first_search_in_objects).key == first_filter:
-                    return  ValueByPathReferenceSearcher._search_recursion(filters,
-                                                                           [cast(YamlDictionary, first_search_in_objects).value], 
-                                                                           first_search_in_objects)
-                elif isinstance(first_search_in_objects, list):
-                    if not ValueByPathReferenceSearcher._check_list_integrity(first_search_in_objects, YamlDictionary):
-                        raise ListNotRespectIntegriry("Items in list not respect integrity: they not have the same type.")
-                    
-                    value_to_return = None
-                    
-                    new_filters = [first_filter]
-                    new_filters.extend(filters.copy())
-                    
-                    for item in first_search_in_objects: 
-                        # TODO: Finish implementation
+                if first_filter != "[]":
+                    if isinstance(item, YamlDictionary) and cast(YamlDictionary, item).key == first_filter:
+                        return  ValueByPathReferenceSearcher._search_recursion(filters[1:],
+                                                                            [cast(YamlDictionary, item).value], 
+                                                                            item)
+                    elif isinstance(item, list):
+                        if not ValueByPathReferenceSearcher._check_list_integrity(item, YamlDictionary):
+                            raise ListNotRespectIntegriry("Items in list not respect integrity: they not have the same type.")
                         
-                        value_from_searcher = ValueByPathReferenceSearcher._search_recursion(new_filters.copy(),
-                                                                           [cast(YamlDictionary, item)], 
-                                                                           None)
-                        if value_from_searcher is not None:
-                            value_to_return = value_from_searcher
+                        for sub_item in item:
+                            value_to_return = ValueByPathReferenceSearcher._search_recursion(filters, item, None)
+                            if value_to_return is not None:
+                                return ValueByPathReferenceSearcher._search_recursion([], [], value_to_return)
+                        # value_to_return = None
+                        
+                        # new_filters = [first_filter]
+                        # new_filters.extend(filters.copy())
+                        
+                        # for item in first_search_in_objects: 
+                        #     # TODO: Finish implementation
                             
-                    
-                    return ValueByPathReferenceSearcher._search_recursion([], 
-                                                                          [cast(YamlDictionary, value_to_return).value],  
-                                                                          value_to_return)
-                elif isinstance(first_search_in_objects, YamlList):
-                    return  ValueByPathReferenceSearcher._search_recursion(filters,
-                                                                           [cast(YamlDictionary, first_search_in_objects).value], 
-                                                                           first_search_in_objects)
+                        #     value_from_searcher = ValueByPathReferenceSearcher._search_recursion(new_filters.copy(),
+                        #                                                     [cast(YamlDictionary, item)], 
+                        #                                                     None)
+                        #     if value_from_searcher is not None:
+                        #         value_to_return = value_from_searcher
+                                
+                        
+                        # return ValueByPathReferenceSearcher._search_recursion([], 
+                        #                                                     [cast(YamlDictionary, value_to_return).value],  
+                        #                                                     value_to_return)
+
+                
                 else:
-                    return ValueByPathReferenceSearcher._search_recursion([], [], None)
-            else:
-                if first_filter == "[]":
-                    if not isinstance(first_search_in_objects, YamlList):
-                        raise Exception
-                return ValueByPathReferenceSearcher._search_recursion(filters,
-                                                                           cast(YamlList, first_search_in_objects).values, 
-                                                                           first_search_in_objects)
+                    if first_filter == "[]":
+                        if not isinstance(item, YamlList):
+                            raise Exception
+                    if ValueByPathReferenceSearcher._check_list_integrity(item.values[0], YamlDictionary):
+                        returned_value  = None
+                        
+                        for sub_item in item.values:
+                            result = ValueByPathReferenceSearcher._search_recursion(filters[1:], sub_item, item)
+                            
+                            if result is not None:
+                                returned_value = result
+                        return ValueByPathReferenceSearcher._search_recursion([],[], returned_value)
+                    else: 
+                        return ValueByPathReferenceSearcher._search_recursion([], [], item.values)
+            return ValueByPathReferenceSearcher._search_recursion([], [], item.values)   
+            
     
     @staticmethod
     def _check_list_integrity(list_to_check: List[Any], type_of_list: type) -> bool:

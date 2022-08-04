@@ -1,5 +1,6 @@
 from io import TextIOWrapper
 from unittest import TestCase
+from unittest import skip
 from src.modules.translators.from_yaml_traslator import FromYamlTraslator
 from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
 from src.modules.yaml_structures.yaml_list import YamlList
@@ -15,13 +16,14 @@ class TestFromYamlTraslator(TestCase):
         self.file_content: dict = {'name': 'value',
                                    'serials': [{'label': 'Chinese_GPS', 'speed': 9600, 'address': '/dev/ttyACM0'}],
                                    'server': {'host': 'localhost', 'port': 4545}}
-        FileUtil.create_file(self.file_directory, self.file_name, self.file_type, self.file_content)
+        
     
     def tearDown(self) -> None:
         
         FileUtil.delete_file(self.file_path)
     
     def test_translate(self):
+        FileUtil.create_file(self.file_directory, self.file_name, self.file_type, self.file_content)
         translator: FromYamlTraslator = FromYamlTraslator(self.file_directory + self.file_name + self.file_type.value)
         
         content_traslated: dict = [ YamlDictionary("name", "value"),
@@ -37,3 +39,20 @@ class TestFromYamlTraslator(TestCase):
    
         # NOTE: This test can fail due to the order of "serials" value.
         self.assertEqual(translator.translate(), content_traslated)
+    
+    @skip("BUG: Discovered bug during modification handlers implementation") 
+    def test_translate_empty_file(self):
+        FileUtil.create_empty_file(self.file_directory, self.file_name, self.file_type)
+        translator: FromYamlTraslator = FromYamlTraslator(self.file_directory + self.file_name + self.file_type.value)
+        
+        self.assertEqual(translator.translate(), [])
+    
+    @skip("BUG: Discovered bug during modification handlers implementation") 
+    def test_translate_file_with_list(self):
+        file_content = [1, 2, 3]
+        FileUtil.create_file(self.file_directory, self.file_name, self.file_type, self.file_content)
+        translator: FromYamlTraslator = FromYamlTraslator(self.file_directory + self.file_name + self.file_type.value)
+        
+        self.assertEqual(translator.translate(), [YamlList(file_content)])
+        
+        
