@@ -1,6 +1,7 @@
 from unittest import TestCase
 from yaml import dump as upload_data  # type: ignore
 from yaml import Dumper
+from src.modules.modification_handlers.exceptions.filter_not_found_exception import FilterNotFoundException
 from src.modules.modification_handlers.exceptions.not_valid_filter_exception import NotValidFilterException
 from src.modules.modification_handlers.exceptions.not_valid_remove_exception import NotValidRemoveException
 
@@ -64,5 +65,5 @@ class TestModificationHandlersRemove(TestCase):
 
         self.modification_handler.load()
 
-        with self.assertRaises(NotValidFilterException):
+        with self.assertRaises(FilterNotFoundException):
             self.modification_handler.remove("key_not_valid")
