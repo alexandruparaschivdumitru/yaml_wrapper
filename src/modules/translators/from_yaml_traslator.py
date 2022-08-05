@@ -1,7 +1,7 @@
 from io import TextIOWrapper
 from yaml import load as download_data # type: ignore
 from yaml import Loader # type: ignore
-from typing import List, Any
+from typing import List, Any, Union
 from typing import cast
 
 from src.modules.translators.enums.rule_type import ListRuleType, RuleType
@@ -23,13 +23,25 @@ class FromYamlTraslator:
             list: Yaml file content in right format
         """
         data_from_file: dict =  self._read_from_file()
-        
-        keys: list = []
-        for key in data_from_file.keys():
-            keys.append(key)
-        rules_applied: list = self._apply_rule_rec(keys, data_from_file, [])
-        
-        return rules_applied
+        if data_from_file is None:
+            return []
+        elif type(data_from_file) is list:
+            data_to_return: list = []
+            for item in data_from_file:
+                if not isinstance(item, int) and (not isinstance(item, str)):
+                    data_to_return.append(self._apply_rule_rec(list(item.keys()), item, []))
+                else:
+                    data_to_return.append(item)
+            
+            return [YamlList(data_to_return)]
+
+        else:
+            keys: list = []
+            for key in data_from_file.keys():
+                keys.append(key)
+            rules_applied: list = self._apply_rule_rec(keys, data_from_file, [])
+            
+            return rules_applied
     
     def _read_from_file(self) -> dict:
         try:
@@ -48,13 +60,6 @@ class FromYamlTraslator:
         return dict_keys_accumulator
             
     def _apply_rule_rec(self, keys: List[str], data: dict, returned_value: list ) -> list:
-        # TODO: handle the case 
-        # """
-        # - item 1
-        # - item 2
-        # - item 3
-        # """  
-           
         if len(keys) == 0:
              return returned_value
         else:
@@ -90,4 +95,5 @@ class FromYamlTraslator:
                     returned_value.append(YamlDictionary(first_key, YamlList(data[first_key])))
      
                  
-        return self._apply_rule_rec(keys[1:], data, returned_value)            
+        return self._apply_rule_rec(keys[1:], data, returned_value) 
+    

@@ -13,7 +13,7 @@ class FileUtil:
     @staticmethod
     def create_file(file_path: str, file_name: str, file_type: FileType, file_content: Union[dict, str]) -> str:
         if file_type == FileType.YAML:
-            if not isinstance(file_content, dict):
+            if not isinstance(file_content, dict) and (not isinstance(file_content, list)):
                 raise NotValidFileContent("The content for the file is not in the right format.")
             with open(file_path + file_name + file_type.value, "w") as file:
                 documents = yaml.dump(file_content, file)
