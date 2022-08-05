@@ -24,13 +24,14 @@ class ModificationHandler:
         
         
     """
-    def __init__(self, file_path: str, safe_load: bool = True) -> None:
+    def __init__(self, file_path: str, safe_load: bool = True, safe_initialization: bool = True) -> None:
         self._file_path = file_path
         self._object: list = []
         self._safe_load: bool = safe_load
+        self._safe_initialization: bool = safe_initialization
         self._loaded: bool = False
         self._synchroniser: Synchroniser = Synchroniser(file_path)
-        self._initialiser: Initialiser = Initialiser(file_path)
+        self._initialiser: Initialiser = Initialiser(file_path, self._safe_initialization)
         self._path_format_validator: YamlObjectPathFormatValidator = YamlObjectPathFormatValidator()
         self._path_remove_validator: YamlObjectPathRemoveValidator = YamlObjectPathRemoveValidator()
         

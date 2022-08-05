@@ -11,7 +11,7 @@ class Synchroniser:
         self._file_path = file_path
         self._to_yaml_translator: ToYamlTranslator = ToYamlTranslator(file_path)
     
-    def synchronise(self, content_to_synchronise: list) -> Union[dict, list]:
+    def synchronise(self, content_to_synchronise: list) -> Union[dict, list, None]:
         self._check_object_content(content_to_synchronise)
         
         return self._to_yaml_translator.translate(content_to_synchronise)

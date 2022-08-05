@@ -1,122 +1,97 @@
 from typing import Any, List, Union, cast
+from src.modules.modification_handlers.modification_handler import ModificationHandler
 from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
 from src.modules.yaml_structures.yaml_list import YamlList
 
 
 class YamlWrapper:
-    def __init__(self, file_name: str) -> None:
-        pass
+    """Creates a wrap over the yaml file. The `safe_initialization` setted True, will be used if the yaml file if not exist will be created according to the file path,
+    otherwise il will be raised the exception `FileNotFoundError`.
     
-    def get_structure(self) -> dict:
-        """Returns general structure of yaml file.
-
-        Returns:
-            dict: General structure.
-        """
-        return {}
-    def get_keys(self) -> list:
-        """Returns a list of all keys in yaml file.
-
-        Returns:
-            list: List of all keys.
-        """
-        pass
     
-    def create_dictionary(self, key: str, value: Union[str, YamlDictionary]) -> YamlDictionary:
-        """Creates a new dictionary. If the key passed is already used is raise an Error.
-
-        Args:
-            key (str): Key of the new dictionary
-            value (Any): Dictionary value
-
-        Returns:
-            YamlDictionary: Created dictionary.
-        """
-        return cast(YamlDictionary, {})
+    Data types:
+    - YamlDictionary: Dictionary with the format accepted by the Yaml Wrap library.
+    - YamlList: List with the format accepted by the Yaml Wrap library.
     
-    def remove_dictionary(self, filter: str) -> YamlDictionary:
-        """Remove a dictionary. 
-
-        Args:
-            filter (str): Filter to determinate which dictionary remove.
-
-        Returns:
-            YamlDictionary: Dictionary removed.
-        """
-        pass
+    IMPORTANT NOTES:
+    The main purpose of this class is to create an abstraction layer over the PyYaml library. It's important to remember that the format of file contenten used in PyYaml library is
+    not compatible.
+    For example if in PyYaml library a dictionary is rappresented ad `{"key", "value"}`, in YamlWrapper is rappresented by YamlDictionary("key", "value").
     
-    def get_value(self, key: str) -> Union[YamlDictionary, YamlList]:
-        """Returns the value of a dictionary
+    """
+    def __init__(self, file_path: str, safe_initialization: bool = True) -> None:
+        self._file_name: str = file_path
+        self._safe_initialization: bool = safe_initialization
+        self._modification_handler: ModificationHandler = ModificationHandler(file_path, safe_initialization)
         
-        Args:
-            key: Key of dictionary to return.
-
-        Returns:
-            Union[YamlDictionary, YamlList]: Value returned.
-        """
-        pass
+        self._modification_handler.load()
     
-    def modify_dictionary(self, filter: Any, new_value: Union[str, YamlDictionary, YamlList], new: bool = True) -> YamlDictionary:
-        """Modify dictionary. The valaue to modify is determined using the filter.
-
-        Args:
-            filter (Any): Filter criteria
-            new_value (Union[str, YamlDictionary, YamlList]): Update value
-            new (bool): If True returns the modified dictinary, else returns the old.
+    def get_file_name(self) -> str:
+        """Returns the name of the file.
 
         Returns:
-            YamlDictionary: If new parameter is `True` it returns the modified dictionary, else returns the old one.
+            str: File name.
         """
-        pass
-
-    def create_new_list(self, value: Union[List[YamlDictionary], YamlList]) -> YamlList:
-        """Creates a new list.
-
-        Args:
-            value (Union[YamlDictionary, YamlList]): List value.
-
-        Returns:
-            YamlList: Return the new list.
-        """
-        pass
+        return self._file_name
     
-    def add_to_list(self, value:  Union[YamlDictionary, YamlList]) -> YamlList:
-        """Adds an intem to the list.
+    def get_file_content(self) -> list:
+        """Returns the content of the file in a list that contains it in the format accepted by the Yaml Wrap library.
+
+        Returns:
+            list: Content of the file.
+        """
+        return self._modification_handler.get()
+    
+    def update(self, filter: str, value: Union[int, str, List[YamlDictionary], YamlList]) -> list:
+        """Updates the value of the file, using a filter to determine the position of the value. After the update the file is synchronised automatically.
 
         Args:
-            value (Union[YamlDictionary, YamlList]): Item to add.
+            filter (str): Filter used to determine the position of the value.
+            value (Union[int, str, List[YamlDictionary], YamlList]): Value to be updated.
 
         Returns:
-            YamlList: Returns the updated list.
+            list: Content of the file updates.
+        
+        Filter format:
+        - File content: [YamlDictionary("key",[YamlDictionary("sub_key", "value")]) -> filter: "key.sub_key"
+        - File content: [YamlDictionary("key",YamlList([1, 2, 3])) -> filter: "key.[]"
+        - File content: [YamlDictionary("key",YamlList([[YamlDictionary("sub_key_1", "value_1"), YamlDictionary("sub_key_2", "value_2")]])] -> filter: "key.[].sub_key_1"
+        
+        Note:
+        The filter it must be in the following format:
+        Supposte che file content is a dictionary with another dictionary as value, so the situation is [YamlDictionary("key", [YamlDictionary("sub_key", "value")])].])], 
+        in order to change the value the filter must be in the following format: "key.sub_key".
+        
         """
-        pass
+        return self._modification_handler.update(filter, value)
     
-    def remove_from_list(self, filter: Any) -> YamlList:
-        """Removes ad item from the list.
+    def remove(self, filter: str) -> list:
+        """Remove a value from the file, using a filter to determine the position. After the remove the file is synchronised automatically.
 
         Args:
-            filter (Any): Filter that determinates the item to remove.
+            filter (str): Filter used to determine the position of the value.
 
         Returns:
-            YamlList: Return the updated list.
-        """
-        pass
+            list: Content of the file updates, after the remove.
+        Filter format:
+        - File content: [YamlDictionary("key",YamlDictionary("sub_key", "value")) -> filter: "key.sub_key"
+        For the remotion the filter must not contain `[]`. This because the list is completely removed, using the value of its key.
     
-    def is_empty(self) -> bool:
-        """Check if a list is empty.
-
-        Args:
-            key (str): _description_
-
-        Returns:
-            bool: Returns `True` if a list is empty, else returns `False`.
+        Example:
+        - List remotion:
+            - File content: [YamlDictionary("key",YamlList([1, 2, 3]))
+                - Filter: "key"
+                - After remove: []
+            - File content: [YamlDictionary("key",[YamlDictionary("sub_key_1", "value_1"), YamlDictionary("sub_key_2", "value_2") ]] 
+                - Filter: "key.sub_key_1"
+                - After remove: [YamlDictionary("key",[YamlDictionary("sub_key_2", "value_2")])] 
         """
-        pass
+        return self._modification_handler.remove(filter)   
     
-    def remove_list(self) -> YamlList:
-        """Removes all items from a list.
+    def clean_file(self) -> bool:
+        """Delete all data in the file. ATTENTION: this operation is not reversible.
 
         Returns:
-            YamlList: Return the list deleted.
+            bool: True if the file is cleaned, False otherwise.
         """
         pass

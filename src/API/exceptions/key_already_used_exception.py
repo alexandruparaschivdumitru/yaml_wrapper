@@ -1,2 +1,0 @@
-class KeyAlreadyUsedException(Exception):
-    pass
