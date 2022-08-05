@@ -22,38 +22,50 @@ class TestToYamlTranslator(TestCase):
         FileUtil.delete_file(self.file_path)
         
         
-    def test_translate(self):
+    def test_general_translate(self):
         content_to_write: list = [
-                                YamlDictionary("name", "value"),
-                                YamlDictionary("serials",YamlList([
-                                                                        YamlDictionary("address", "/dev/ttyACM0"),
-                                                                        YamlDictionary("label", "Chinese_GPS"),
-                                                                        YamlDictionary("speed", 9600)]
-                                                                    )
+                                YamlDictionary("key_1", "key_1_value"),
+                                YamlDictionary("key_2",YamlList([[
+                                                                YamlDictionary("sub_key_1", "sub_key_1_value"),
+                                                                YamlDictionary("sub_key_2", "sub_key_2_value"),
+                                                                YamlDictionary("sub_key_3", 1)
+                                                                ]])
                                                 ),
-                                YamlDictionary("server", [YamlDictionary("host", "localhost"),
-                                                             YamlDictionary("port", 4545)])
+                                YamlDictionary("key_3", [YamlDictionary("sub_key_1", "sub_key_1_value"),
+                                                        YamlDictionary("sub_key_2", 1)]
+                                               )
                                     ]
+        content_translated: dict = {'key_1': 'key_1_value',
+                                   'key_2': [{'sub_key_1': 'sub_key_1_value', 
+                                              'sub_key_2': 'sub_key_2_value', 
+                                              'sub_key_3': 1}],
+                                   'key_3': {'sub_key_1': 'sub_key_1_value', 
+                                             'sub_key_2': 1}}
         
         translator: ToYamlTranslator = ToYamlTranslator(self.file_path)
         translated = translator.translate(content_to_write)
         
-        self.assertEqual(translated, {'name': 'value',
-                                   'serials': [{'label': 'Chinese_GPS', 'speed': 9600, 'address': '/dev/ttyACM0'}],
-                                   'server': {'host': 'localhost', 'port': 4545}})
+        self.assertEqual(translated, content_translated)
         
     def test_correct_write_in_yaml_file(self):
         content_to_write: list = [
-                                YamlDictionary("name", "value"),
-                                YamlDictionary("serials",YamlList([
-                                                                        YamlDictionary("address", "/dev/ttyACM0"),
-                                                                        YamlDictionary("label", "Chinese_GPS"),
-                                                                        YamlDictionary("speed", 9600)]
-                                                                    )
+                                YamlDictionary("key_1", "key_1_value"),
+                                YamlDictionary("key_2",YamlList([[
+                                                                YamlDictionary("sub_key_1", "sub_key_1_value"),
+                                                                YamlDictionary("sub_key_2", "sub_key_2_value"),
+                                                                YamlDictionary("sub_key_3", 1)
+                                                                ]])
                                                 ),
-                                YamlDictionary("server", [YamlDictionary("host", "localhost"),
-                                                             YamlDictionary("port", 4545)])
+                                YamlDictionary("key_3", [YamlDictionary("sub_key_1", "sub_key_1_value"),
+                                                        YamlDictionary("sub_key_2", 1)]
+                                               )
                                     ]
+        content_translated: dict = {'key_1': 'key_1_value',
+                                   'key_2': [{'sub_key_1': 'sub_key_1_value', 
+                                              'sub_key_2': 'sub_key_2_value', 
+                                              'sub_key_3': 1}],
+                                   'key_3': {'sub_key_1': 'sub_key_1_value', 
+                                             'sub_key_2': 1}}
         
         translator: ToYamlTranslator = ToYamlTranslator(self.file_path)
         translator.translate(content_to_write)
@@ -62,9 +74,7 @@ class TestToYamlTranslator(TestCase):
         with open(self.file_path, "r") as file_read:
             file_read_content = download_data(file_read,Loader)
             
-        self.assertEqual(file_read_content, {'name': 'value',
-                                   'serials': [{'label': 'Chinese_GPS', 'speed': 9600, 'address': '/dev/ttyACM0'}],
-                                   'server': {'host': 'localhost', 'port': 4545}})
+        self.assertEqual(file_read_content, content_translated)
         
         
     def test_write_list(self):
@@ -93,3 +103,135 @@ class TestToYamlTranslator(TestCase):
             file_read_content = download_data(file_read,Loader)
             
         self.assertEqual(file_read_content, [1, 2, 3, 4])
+        
+    def test_dict_with_list(self):
+        content_to_translate: list = [YamlDictionary("key", YamlList([
+                                                                        [YamlDictionary("sub_key_1_A", "sub_key_1_A_value"),
+                                                                         YamlDictionary("sub_key_2_A", "sub_key_2_A_value"),],
+                                                                        [YamlDictionary("sub_key_1_B", "sub_key_1_B_value"),
+                                                                         YamlDictionary("sub_key_2_B", "sub_key_2_B_value"),]
+                                                                    ])
+                                                    )
+                                        ]
+        
+        content_translated: dict = {"key":[{"sub_key_1_A": "sub_key_1_A_value",
+                                            "sub_key_2_A": "sub_key_2_A_value"},
+                                           {"sub_key_1_B": "sub_key_1_B_value",
+                                            "sub_key_2_B": "sub_key_2_B_value"}]}
+    
+        translator: ToYamlTranslator = ToYamlTranslator(self.file_path)
+        translator.translate(content_to_translate)
+        
+        file_read_content: dict = {}
+        with open(self.file_path, "r") as file_read:
+            file_read_content = download_data(file_read,Loader)
+            
+        self.assertEqual(file_read_content, content_translated)
+        
+    
+    def test_dict_with_sub_dict(self):
+        content_to_translate: list = [YamlDictionary("key", [YamlDictionary("sub_key_1", "sub_key_1_value"),
+                                                              YamlDictionary("sub_key_2", "sub_key_2_value")
+                                                              ]
+                                                      )
+                                       ]
+        
+        content_translated: dict = {"key": {"sub_key_1": "sub_key_1_value",
+                                            "sub_key_2": "sub_key_2_value",}}
+        
+        translator: ToYamlTranslator = ToYamlTranslator(self.file_path)
+        translator.translate(content_to_translate)
+        
+        file_read_content: dict = {}
+        with open(self.file_path, "r") as file_read:
+            file_read_content = download_data(file_read,Loader)
+            
+        self.assertEqual(file_read_content, content_translated)
+    
+    def test_multiple_dicts(self):
+        content_to_translate: list = [YamlDictionary("key_1", "key_1_value"),
+                                         YamlDictionary("key_2", 2),
+                                         YamlDictionary("key_3", [YamlDictionary("sub_key_1", "value_1"),
+                                                                  YamlDictionary("sub_key_2", "value_2")
+                                                                  ])
+                                        ]
+        content_translated: dict = {"key_1": "key_1_value",
+                              "key_2": 2,
+                              "key_3": {"sub_key_1": "value_1", "sub_key_2": "value_2"}
+                              }
+        translator: ToYamlTranslator = ToYamlTranslator(self.file_path)
+        translator.translate(content_to_translate)
+        
+        file_read_content: dict = {}
+        with open(self.file_path, "r") as file_read:
+            file_read_content = download_data(file_read,Loader)
+            
+        self.assertEqual(file_read_content, content_translated)
+    
+    def test_multi_dict_with_list(self):
+        content_translated: dict = {
+                                "key_1": [
+                                            {"sub_key_1_A": "value_1_A",
+                                            "sub_key_2_A": "value_2_A"},
+                                            {"sub_key_1_B": "value_1_B",
+                                            "sub_key_2_B": "value_2_B"}
+                                        ],
+                                "key_2": "key_2_value",
+                            }
+        content_to_translate: list = [
+                                            YamlDictionary("key_1", 
+                                                        YamlList(
+                                                                    [
+                                                                        [
+                                                                        YamlDictionary("sub_key_1_A", "value_1_A"),
+                                                                        YamlDictionary("sub_key_2_A", "value_2_A"),
+                                                                        ],
+                                                                        [
+                                                                        YamlDictionary("sub_key_1_B", "value_1_B"),
+                                                                        YamlDictionary("sub_key_2_B", "value_2_B"),
+                                                                        ]
+                                                                    ]
+                                                                )
+                                                            ),
+                                            YamlDictionary("key_2", "key_2_value")
+                                        ]
+        
+        translator: ToYamlTranslator = ToYamlTranslator(self.file_path)
+        translator.translate(content_to_translate)
+        
+        file_read_content: dict = {}
+        with open(self.file_path, "r") as file_read:
+            file_read_content = download_data(file_read,Loader)
+            
+        self.assertEqual(file_read_content, content_translated)
+        
+    def test_with_multiple_sub_dict(self):
+        content_to_translate: list = [YamlDictionary("key", 
+                                                        [YamlDictionary("sub_key", 
+                                                                        [YamlDictionary("sub_sub_key", "value")]
+                                                                        )
+                                                        ]
+                                                        )
+                                        ]
+        
+        content_translated: list = {"key": {"sub_key": {"sub_sub_key": "value"}}}
+        
+        translator: ToYamlTranslator = ToYamlTranslator(self.file_path)
+        translator.translate(content_to_translate)
+        
+        file_read_content: dict = {}
+        with open(self.file_path, "r") as file_read:
+            file_read_content = download_data(file_read,Loader)
+            
+        self.assertEqual(file_read_content, content_translated)
+        
+    def test_empty_file(self):
+        
+        translator: ToYamlTranslator = ToYamlTranslator(self.file_path)
+        translator.translate([])
+        
+        file_read_content: dict = {}
+        with open(self.file_path, "r") as file_read:
+            file_read_content = download_data(file_read,Loader)
+            
+        self.assertEqual(file_read_content, None)

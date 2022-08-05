@@ -15,8 +15,8 @@ class TestFromYamlTraslator(TestCase):
         self.file_path: str = self.file_directory + self.file_name + self.file_type.value
     
     def tearDown(self) -> None:
-        #FileUtil.delete_file(self.file_path)
-        pass
+        FileUtil.delete_file(self.file_path)
+        
     
     def test_general_translate(self):
         file_content: dict = { 
