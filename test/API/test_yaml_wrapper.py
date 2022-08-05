@@ -1,5 +1,4 @@
 from unittest import TestCase
-
 from src.API.yaml_wrapper import YamlWrapper
 from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
 from src.modules.yaml_structures.yaml_list import YamlList
