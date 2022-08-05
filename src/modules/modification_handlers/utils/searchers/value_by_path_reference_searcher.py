@@ -1,6 +1,7 @@
 from typing import List, Any
 from typing import Union
 from typing import cast
+from src.modules.modification_handlers.exceptions.not_valid_filter_exception import NotValidFilterException
 from src.modules.yaml_structures.exceptions.list_not_respect_integrity import ListNotRespectIntegriry
 
 from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
@@ -33,30 +34,10 @@ class ValueByPathReferenceSearcher:
                             value_to_return = ValueByPathReferenceSearcher._search_recursion(filters, item, None)
                             if value_to_return is not None:
                                 return ValueByPathReferenceSearcher._search_recursion([], [], value_to_return)
-                        # value_to_return = None
-                        
-                        # new_filters = [first_filter]
-                        # new_filters.extend(filters.copy())
-                        
-                        # for item in first_search_in_objects: 
-                        #     # TODO: Finish implementation
-                            
-                        #     value_from_searcher = ValueByPathReferenceSearcher._search_recursion(new_filters.copy(),
-                        #                                                     [cast(YamlDictionary, item)], 
-                        #                                                     None)
-                        #     if value_from_searcher is not None:
-                        #         value_to_return = value_from_searcher
-                                
-                        
-                        # return ValueByPathReferenceSearcher._search_recursion([], 
-                        #                                                     [cast(YamlDictionary, value_to_return).value],  
-                        #                                                     value_to_return)
-
-                
                 else:
                     if first_filter == "[]":
                         if not isinstance(item, YamlList):
-                            raise Exception
+                            raise NotValidFilterException("The filter is not applicable to the structure of the object.")
                     if ValueByPathReferenceSearcher._check_list_integrity(item.values[0], YamlDictionary):
                         returned_value  = None
                         

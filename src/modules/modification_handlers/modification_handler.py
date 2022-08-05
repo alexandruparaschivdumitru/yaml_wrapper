@@ -81,20 +81,22 @@ class ModificationHandler:
 
         Args:
             filter (str): Filter used to determine the position of the value.
-            update_data (Union[int, str, YamlDictionary, YamlList, List[YamlDictionary], List[YamlList]]): Data to be updated.
+            update_data (Union[int, str, YamlDictionary, YamlList, List[YamlDictionary], List[List[YamlDictionary]],  List[YamlList]]): Data to be updated.
 
         Returns:
             list: Copy of object with updated value.
         """
         self._check_safe_load()
-        self._path_format_validator.validate(filter)
+        if not self._path_format_validator.validate(filter):
+            raise NotValidFilterException("The filter is not valid. Probably its structure is not correct.")
+        
         filter_splitted: list = filter.split(".")
         try:
             object_to_modify: Union[YamlDictionary, YamlList, None] = ValueByPathReferenceSearcher.search(filter_splitted, self._object)
             if object_to_modify is None:
-                raise FilterNotFoundException("Filter not found.")
-        except Exception:
-            raise NotValidFilterException("The filter is not valid.")
+                raise FilterNotFoundException("The filter not produced any result.")
+        except (FilterNotFoundException, NotValidRemoveException) as error:
+            raise error
         
         self._check_if_update_is_valid(object_to_modify, update_data)
 
@@ -104,32 +106,35 @@ class ModificationHandler:
             cast(YamlList, object_to_modify).values = cast(Union[List[YamlDictionary], List[Any]],update_data)
         
         self._synchroniser.synchronise(self._object.copy())
+        
         return self._object.copy()
     
-    def remove(self, filter: str, value: str = "") -> list:
+    def remove(self, filter: str) -> list:
         """ Removes a value from the file, using a filter to determine the position of the value.
 
         Args:
             filter (str): Filter used to determine the position of the value.
-            value (str, optional): If the item to remove is from a `YamlList`, the value is used to filter between equal values, otherwise if the item is a `YamlDictionary` the content of value is ignored. Defaults to "".
 
         Returns:
             list: Copy of object with the item removed.
         """
         self._check_safe_load()
-        self._path_format_validator.validate(filter)
+        
+        if not self._path_format_validator.validate(filter):
+            raise NotValidFilterException("The filter is not valid. Probably its structure is not correct.")
         
         
         if not self._path_remove_validator.validate(filter):
             raise NotValidRemoveException("The filter is not valid, for removing.")
         
         filter_splitted: list = filter.split(".")
-        try:
-            object_to_remove: Union[YamlDictionary, YamlList, None] = ObjectByPathReference.search(filter_splitted, self._object)
-            if object_to_remove is None:
-                raise FilterNotFoundException("Filter not found.")
-        except Exception:
-            raise NotValidFilterException("The filter is not valid.")
+        
+        object_to_remove: Union[YamlDictionary, YamlList, None] = ObjectByPathReference.search(filter_splitted, self._object)
+        if object_to_remove is None:
+            raise FilterNotFoundException("The filter not produced any result.")
+        
+        
+        self._synchroniser.synchronise(self._object.copy())
         
         return self._object.copy()
     
