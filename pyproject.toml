@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "YamlWrapper"
+version = "0.0.1"
+authors = [
+  { name="Alexandru Dumitru", email="aaaalexdumitru@gmail.com" },
+]
+description = "YamlWrapper is a wrapper for yaml files, it creates an abstraction layer that allow to handle yaml files in a easier way."
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/alexandruparaschivdumitru/yaml_wrapper"
+"Bug Tracker" = "https://github.com/alexandruparaschivdumitru/yaml_wrapper/issues"
