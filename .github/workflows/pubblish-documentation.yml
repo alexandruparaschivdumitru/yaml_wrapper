@@ -3,7 +3,7 @@ name: Pubblish documentation on github pages
 on:
   pull_request:
     brances:
-      - main
+      - master
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run:  pip install -r requirements.txt
 
-      - run: mkdir docs; pdoc ./src/API/yaml_wrapper.py -o ./docs
+      - run: pdoc ./src/API/yaml_wrapper.py -o ./docs
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
