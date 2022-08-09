@@ -1,7 +1,7 @@
 from typing import Any, List, Union, cast
-from src.modules.modification_handlers.modification_handler import ModificationHandler
-from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
-from src.modules.yaml_structures.yaml_list import YamlList
+from ..modules.modification_handlers.modification_handler import ModificationHandler
+from ..modules.yaml_structures.yaml_dictionary import YamlDictionary
+from ..modules.yaml_structures.yaml_list import YamlList
 
 
 class YamlWrapper:
