@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "YamlWrapper"
+name = "PythonYamlWrapper"
 version = "1.0.0"
 authors = [
   { name="Alexandru Dumitru", email="aaaalexdumitru@gmail.com" },
@@ -21,5 +21,6 @@ classifiers = [
 ]
 
 [project.urls]
+"Documentation" = "https://alexandruparaschivdumitru.github.io/yaml_wrapper/src/API/yaml_wrapper.html"
 "Source" = "https://github.com/alexandruparaschivdumitru/yaml_wrapper"
 "Bug Tracker" = "https://github.com/alexandruparaschivdumitru/yaml_wrapper/issues"
