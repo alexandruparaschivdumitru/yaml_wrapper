@@ -17,10 +17,10 @@ jobs:
       - name: Install dependencies
         run:  pip install -r requirements.txt
 
-      - run: mkdir docs; pdoc --html --output-dir docs src.API
+      - run: mkdir docs; pdoc ./src/API/yaml_wrapper.py -o ./docs
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PUBLISH_DOCS }}
           publish_dir: ./docs
