@@ -1,0 +1,22 @@
+name: Acceptation pull request
+
+on:
+  pull_request:
+    brances:
+      - dev
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+            python-version: 3.8
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run tests
+        run: ls -la; mkdir tmp; python3 -m unittest discover test
