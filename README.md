@@ -1,8 +1,7 @@
 # YamlWrapper
-![GitHub](https://img.shields.io/github/license/alexandruparaschivdumitru/yaml_wrapper?style=flat-square)
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/alexandruparaschivdumitru/yaml_wrapper?style=flat-square)
-![GitHub top language](https://img.shields.io/github/languages/top/alexandruparaschivdumitru/yaml_wrapper?style=flat-square)
-![GitHub top language](https://img.shields.io/github/languages/top/alexandruparaschivdumitru/yaml_wrapper?style=flat-square)
+![GitHub](https://img.shields.io/github/license/alexandruparaschivdumitru/yaml_wrapper?style=for-the-badge)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/alexandruparaschivdumitru/yaml_wrapper?style=for-the-badge)
+![GitHub top language](https://img.shields.io/github/languages/top/alexandruparaschivdumitru/yaml_wrapper?style=for-the-badge)
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/49406681/183289867-ce12c95d-8363-46c6-bfdd-21f0b8fd7eeb.png" width="80%">
@@ -14,7 +13,7 @@
 You can find the official documentation in Pages section of Github repo or directely at this [link]()  
 ## Installation
 ```zsh
-   pip install YamlWrapper
+   pip install PythonYamlWrapper
 ```
 ## Importing
 ```python
