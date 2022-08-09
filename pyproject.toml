@@ -21,5 +21,6 @@ classifiers = [
 ]
 
 [project.urls]
+"Documentation" = "https://alexandruparaschivdumitru.github.io/yaml_wrapper/src/API/yaml_wrapper.html"
 "Source" = "https://github.com/alexandruparaschivdumitru/yaml_wrapper"
 "Bug Tracker" = "https://github.com/alexandruparaschivdumitru/yaml_wrapper/issues"
