@@ -4,10 +4,10 @@ from yaml import Loader # type: ignore
 from typing import List, Any, Union
 from typing import cast
 
-from src.modules.translators.enums.rule_type import ListRuleType, RuleType
-from src.modules.translators.utils.rule_util import RuleFromValueUtil
-from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
-from src.modules.yaml_structures.yaml_list import YamlList
+from ..translators.enums.rule_type import ListRuleType, RuleType
+from ..translators.utils.rule_util import RuleFromValueUtil
+from ..yaml_structures.yaml_dictionary import YamlDictionary
+from ..yaml_structures.yaml_list import YamlList
 
 
 class FromYamlTraslator:

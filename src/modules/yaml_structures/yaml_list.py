@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Union, List, Any
 
-from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
+from ..yaml_structures.yaml_dictionary import YamlDictionary
 
 @dataclass
 class YamlList:

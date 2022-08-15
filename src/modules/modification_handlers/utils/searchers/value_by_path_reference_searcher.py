@@ -1,11 +1,11 @@
 from typing import List, Any
 from typing import Union
 from typing import cast
-from src.modules.modification_handlers.exceptions.not_valid_filter_exception import NotValidFilterException
-from src.modules.yaml_structures.exceptions.list_not_respect_integrity import ListNotRespectIntegriry
+from ....modification_handlers.exceptions.not_valid_filter_exception import NotValidFilterException
+from ....yaml_structures.exceptions.list_not_respect_integrity import ListNotRespectIntegriry
 
-from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
-from src.modules.yaml_structures.yaml_list import YamlList
+from ....yaml_structures.yaml_dictionary import YamlDictionary
+from ....yaml_structures.yaml_list import YamlList
 
 class ValueByPathReferenceSearcher:
     @staticmethod

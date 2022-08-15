@@ -17,7 +17,7 @@ You can find the official documentation in Pages section of Github repo or direc
 ```
 ## Importing
 ```python
-   from wrapper.yaml_wrapper import YamlWrapper
+   from yaml_wrapper import YamlWrapper
    
    yaml_wrapper: YamlWrapper = YamlWrapper("tmp/file_path.yaml")
 ```

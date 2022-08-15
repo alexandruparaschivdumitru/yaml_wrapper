@@ -1,7 +1,7 @@
 from typing import Any, List
 from typing import Callable
 
-from src.modules.validators.abstracts.validator import Validator
+from ..validators.abstracts.validator import Validator
 
 class YamlObjectPathFormatValidator(Validator):
     def __init__(self) -> None:

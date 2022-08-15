@@ -3,7 +3,7 @@ from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
 from src.modules.yaml_structures.yaml_list import YamlList
 from src.utils.file.enums.file_type import FileType
 from src.utils.file.file_utils import FileUtil
-from src.yaml_wrapper import YamlWrapper
+from src.API.yaml_wrapper import YamlWrapper
 
 class TestYamlWrapper(TestCase):
     def setUp(self) -> None:
