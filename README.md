@@ -70,5 +70,5 @@ I rappresented by:
 ## Special thanks
 [PyYaml](https://pypi.org/project/PyYAML/)
 
-## Author :bust_in_silhouette: 
-- [Alexandru Paraschiv Dumitru](aaaalexdumitru@gmail.com) :mailbox:
+## Author
+- [Alexandru Paraschiv Dumitru](aaaalexdumitru@gmail.com)
