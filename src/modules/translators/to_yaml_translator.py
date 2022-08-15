@@ -2,12 +2,11 @@ from yaml import dump as upload_data # type: ignore
 from yaml import Dumper
 from yaml import YAMLError
 from typing import Any, List, Union, cast
-from src.modules.translators.exceptions.rule_not_found_exception import RuleNotFoundException
-
-from src.modules.translators.exceptions.writing_yaml_exception import WritingYamlException
-from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
-from src.modules.yaml_structures.yaml_list import YamlList
-from src.utils.file.file_utils import FileUtil
+from ..translators.exceptions.rule_not_found_exception import RuleNotFoundException
+from ..translators.exceptions.writing_yaml_exception import WritingYamlException
+from ..yaml_structures.yaml_dictionary import YamlDictionary
+from ..yaml_structures.yaml_list import YamlList
+from ...utils.file.file_utils import FileUtil
 
 
 class ToYamlTranslator:

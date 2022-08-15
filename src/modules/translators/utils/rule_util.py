@@ -1,9 +1,9 @@
 from typing import Any, List, Union, Tuple
-from src.modules.translators.enums.object_type import ObjectType
-from src.modules.translators.enums.rule_type import ListRuleType, RuleType
-from src.modules.translators.exceptions.rule_not_found_exception import RuleNotFoundException
-from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
-from src.modules.yaml_structures.yaml_list import YamlList
+from ...translators.enums.object_type import ObjectType
+from ...translators.enums.rule_type import ListRuleType, RuleType
+from ...translators.exceptions.rule_not_found_exception import RuleNotFoundException
+from ...yaml_structures.yaml_dictionary import YamlDictionary
+from ...yaml_structures.yaml_list import YamlList
 
 
 class RuleFromValueUtil:

@@ -1,8 +1,8 @@
 from typing import List, Any
 from typing import Union
 
-from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
-from src.modules.yaml_structures.yaml_list import YamlList
+from ....yaml_structures.yaml_dictionary import YamlDictionary
+from ....yaml_structures.yaml_list import YamlList
 
 class ValueByPathBooleanSearcher:
     @staticmethod

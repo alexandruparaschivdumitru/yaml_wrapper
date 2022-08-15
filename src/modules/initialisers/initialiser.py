@@ -1,5 +1,5 @@
-from src.modules.translators.from_yaml_traslator import FromYamlTraslator
-from src.utils.file.file_utils import FileUtil
+from ..translators.from_yaml_traslator import FromYamlTraslator
+from ...utils.file.file_utils import FileUtil
 
 
 class Initialiser:

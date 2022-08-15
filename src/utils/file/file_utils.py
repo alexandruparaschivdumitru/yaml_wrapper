@@ -3,9 +3,9 @@ import os.path as path
 import yaml # type: ignore
 from typing import Any, Union
 
-from src.utils.file.enums.file_type import FileType
-from src.utils.file.exceptions.not_supported_file_extension import NotSupportedFileExtensionException
-from src.utils.file.exceptions.not_valid_file_content import NotValidFileContent
+from .enums.file_type import FileType
+from .exceptions.not_supported_file_extension import NotSupportedFileExtensionException
+from .exceptions.not_valid_file_content import NotValidFileContent
 
 
 

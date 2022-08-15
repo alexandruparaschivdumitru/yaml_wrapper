@@ -1,6 +1,4 @@
 from abc import ABCMeta, abstractmethod
-from typing import Any
-from typing import Callable
 
 class Validator(metaclass=ABCMeta):
     @classmethod
