@@ -1,19 +1,19 @@
 from typing import Any, List, Union, cast
-from src.modules.initialisers.initialiser import Initialiser
-from src.modules.modification_handlers.exceptions.filter_not_found_exception import FilterNotFoundException
-from src.modules.modification_handlers.exceptions.not_safe_load_exception import NotSafeLoadException
-from src.modules.modification_handlers.exceptions.not_valid_filter_exception import NotValidFilterException
-from src.modules.modification_handlers.exceptions.not_valid_remove_exception import NotValidRemoveException
-from src.modules.modification_handlers.exceptions.not_valid_update_exception import NotValidUpdateException
-from src.modules.modification_handlers.utils.searchers.object_by_path_reference_searcer import ObjectByPathReference
-from src.modules.modification_handlers.utils.searchers.value_by_path_boolean_searcher import ValueByPathBooleanSearcher
-from src.modules.modification_handlers.utils.searchers.value_by_path_reference_searcher import ValueByPathReferenceSearcher
+from ..initialisers.initialiser import Initialiser
+from ..modification_handlers.exceptions.filter_not_found_exception import FilterNotFoundException
+from ..modification_handlers.exceptions.not_safe_load_exception import NotSafeLoadException
+from ..modification_handlers.exceptions.not_valid_filter_exception import NotValidFilterException
+from ..modification_handlers.exceptions.not_valid_remove_exception import NotValidRemoveException
+from ..modification_handlers.exceptions.not_valid_update_exception import NotValidUpdateException
+from ..modification_handlers.utils.searchers.object_by_path_reference_searcer import ObjectByPathReference
+from ..modification_handlers.utils.searchers.value_by_path_boolean_searcher import ValueByPathBooleanSearcher
+from ..modification_handlers.utils.searchers.value_by_path_reference_searcher import ValueByPathReferenceSearcher
 
-from src.modules.synchronisers.synchroniser import Synchroniser
-from src.modules.validators.yaml_object_path_format_validator import YamlObjectPathFormatValidator
-from src.modules.validators.yaml_object_path_remove_validator import YamlObjectPathRemoveValidator
-from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
-from src.modules.yaml_structures.yaml_list import YamlList
+from ..synchronisers.synchroniser import Synchroniser
+from ..validators.yaml_object_path_format_validator import YamlObjectPathFormatValidator
+from ..validators.yaml_object_path_remove_validator import YamlObjectPathRemoveValidator
+from ..yaml_structures.yaml_dictionary import YamlDictionary
+from ..yaml_structures.yaml_list import YamlList
 
 class ModificationHandler:
     """`ModificationHandler` class handles all the possible modification that are allowed using the `YamlDictionary` and `YamlList` classes.

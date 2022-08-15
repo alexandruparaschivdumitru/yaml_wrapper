@@ -1,9 +1,8 @@
 from typing import Union
-from src.modules.synchronisers.exceptions.not_synchronisable_object_exception import NotSynchronisableObjectException
-
-from src.modules.translators.to_yaml_translator import ToYamlTranslator
-from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
-from src.modules.yaml_structures.yaml_list import YamlList
+from ..synchronisers.exceptions.not_synchronisable_object_exception import NotSynchronisableObjectException
+from ..translators.to_yaml_translator import ToYamlTranslator
+from ..yaml_structures.yaml_dictionary import YamlDictionary
+from ..yaml_structures.yaml_list import YamlList
 
 
 class Synchroniser:
