@@ -10,7 +10,7 @@
 ## Description
 ***YamlWrapper*** is an abstraction over PyYAML library. Its purpuse is to made easier to interact with `.yaml` files. This is made possible by create/update/remove operations with two main abstract data types: `YamlDictionary` and `YamlList`.
 ## Documentation
-You can find the official documentation in Pages section of Github repo or directely at this [link]()  
+You can find the official documentation at this [link](https://alexandruparaschivdumitru.github.io/yaml_wrapper/src/API/yaml_wrapper.html)  
 ## Installation
 ```zsh
    pip install PythonYamlWrapper
