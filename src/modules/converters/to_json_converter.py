@@ -2,8 +2,8 @@ from json import dumps as convert_to_json
 from typing import Any, List
 from typing import Union
 from typing import cast
-from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
-from src.modules.yaml_structures.yaml_list import YamlList
+from ..yaml_structures.yaml_dictionary import YamlDictionary
+from ..yaml_structures.yaml_list import YamlList
 
 class ToJsonConverter:
     """ **ToJsonConverter** converts a list of YamlDictionary or YamlList objects to a JSON string.
