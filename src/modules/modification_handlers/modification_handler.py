@@ -1,4 +1,6 @@
 from typing import Any, List, Union, cast
+
+from src.modules.modification_handlers.exceptions.key_already_used_exception import KeyAlreadyUsedException
 from ..initialisers.initialiser import Initialiser
 from ..modification_handlers.exceptions.filter_not_found_exception import FilterNotFoundException
 from ..modification_handlers.exceptions.not_safe_load_exception import NotSafeLoadException
@@ -74,6 +76,31 @@ class ModificationHandler:
         filter_splitted: list = filter.split(".")
         return ValueByPathBooleanSearcher.search(filter_splitted, value, search_in_object)
         
+    def add(self, key: str, data_to_add: Union[int, str, YamlDictionary, YamlList, List[YamlDictionary], List[List[YamlDictionary]]]) -> list:
+        """Adds and item under the specified key.
+
+        Args:
+            key (str): Key to add.
+            data_to_add (Union[int, str, YamlDictionary, YamlList, List[YamlDictionary], List[List[YamlDictionary]]]): Object to add.
+
+        Raises:
+            KeyAlreadyUsedException: If the key already exists.
+
+        Returns:
+            list: Copy of the object with the item added.
+            
+        Note: This method doesn't check the data_to_add parameter, it this is not in right format, the file .yaml can be corrupted.
+        """
+        self._check_safe_load()
+        
+        if self._check_if_key_already_exists(key):
+            raise KeyAlreadyUsedException("Key "+ key +" already exists.")
+        
+        self._object.append(YamlDictionary(key, data_to_add))
+        
+        self._synchroniser.synchronise(self._object.copy())
+        
+        return self._object.copy()
     
     def update(self, 
                filter: str, 
@@ -163,3 +190,11 @@ class ModificationHandler:
         else:
             if not (isinstance(update, List)):
                 raise NotValidUpdateException("The update is not valid.")
+            
+    def _check_if_key_already_exists(self, key: str) -> bool:
+        key_already_exists: bool = False
+        for item in self._object:
+            if isinstance(item, YamlDictionary) and item.key == key:
+                key_already_exists = True
+                
+        return key_already_exists
