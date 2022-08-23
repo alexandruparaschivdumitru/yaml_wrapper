@@ -6,8 +6,19 @@ from src.modules.yaml_structures.yaml_dictionary import YamlDictionary
 from src.modules.yaml_structures.yaml_list import YamlList
 
 class ToJsonConverter:
+    """ **ToJsonConverter** converts a list of YamlDictionary or YamlList objects to a JSON string.
+    """
     @staticmethod
     def convert(data_to_convert: list) -> str:
+        """
+        Converts a list of YamlDictionary or YamlList to a JSON string.
+
+        ***Args:***
+            - `data_to_convert (list)`: List to convert.
+
+        ***Returns:***
+            - `str`: JSON string.
+        """
         content_to_convert: Union[dict, list] = ToJsonConverter._convert_recursion(data_to_convert, {})
         return convert_to_json(content_to_convert)
     
