@@ -78,6 +78,24 @@ class YamlWrapper:
         """
         return self._modification_handler.update(filter, value)
     
+    def add(self, key: str, data_to_add: Union[int, str, List[YamlDictionary], YamlList]) -> list:
+        """Adds an item under the specified `key`.
+
+        ***Args:***
+        - `key (str)`: Key to add.
+        - `data_to_add (Union[int, str, List[YamlDictionary], YamlList])`: Data to add.
+        
+        ***Raises:***
+        -  `KeyAlreadyUsedException`: If the key already exists.
+        
+        ***Returns:***
+            `list`: Content of the file updated, after the add.
+       
+        
+        ***Note***: This method doesn't check the `data_to_add parameter`, it this is not in right format, the file `.yaml` can be corrupted.
+        """
+        return self._modification_handler.add(key, data_to_add)
+    
     def remove(self, filter: str) -> list:
         """Remove a value from the file, using a filter to determine the position. After the remove the file is synchronised automatically.
 
@@ -85,7 +103,7 @@ class YamlWrapper:
         - `filter (str)`: Filter used to determine the position of the value.
 
         ***Returns:***
-            `list`: Content of the file updates, after the remove.
+            `list`: Content of the file updated, after the remove.
         
         ***Filter format:***
         - File content: `[YamlDictionary("key",YamlDictionary("sub_key", "value"))` -> filter: `"key.sub_key"`
