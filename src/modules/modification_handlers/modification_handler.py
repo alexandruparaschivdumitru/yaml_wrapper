@@ -1,6 +1,6 @@
 from typing import Any, List, Union, cast
 
-from src.modules.modification_handlers.exceptions.key_already_used_exception import KeyAlreadyUsedException
+from ..modification_handlers.exceptions.key_already_used_exception import KeyAlreadyUsedException
 from ..initialisers.initialiser import Initialiser
 from ..modification_handlers.exceptions.filter_not_found_exception import FilterNotFoundException
 from ..modification_handlers.exceptions.not_safe_load_exception import NotSafeLoadException
