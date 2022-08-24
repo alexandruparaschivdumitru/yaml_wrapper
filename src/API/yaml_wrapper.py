@@ -1,4 +1,7 @@
+from tkinter import Y
 from typing import  List, Union
+
+from ..modules.modification_handlers.exceptions.filter_not_found_exception import FilterNotFoundException
 from ..modules.modification_handlers.modification_handler import ModificationHandler
 from ..modules.yaml_structures.yaml_dictionary import YamlDictionary
 from ..modules.yaml_structures.yaml_list import YamlList
@@ -46,6 +49,22 @@ class YamlWrapper:
             `list`: Content of the file.
         """
         return self._modification_handler.get()
+    
+    def find_by_filter(self, filter: str) -> Union[YamlDictionary, YamlList, None]:
+        """Search an item using a filter. If the item is found returns it.
+        ***Args:***
+        - filter (str)`: Filter used to determine the position of the value.
+
+        ***Returns:***
+        - `Union[YamlDictionary, YamlList, None]`: : Item found, or None if is not found.
+        """
+        value_to_return: Union[YamlDictionary, YamlList, None]
+        try:
+            value_to_return = self._modification_handler.find_by_filter(filter)
+        except FilterNotFoundException:
+            value_to_return = None
+           
+        return value_to_return 
     
     def update(self, filter: str, value: Union[int, str, List[YamlDictionary], YamlList]) -> list:
         """Updates the value of the file, using a filter to determine the position of the value. After the update the file is synchronised automatically.
@@ -120,10 +139,14 @@ class YamlWrapper:
         """
         return self._modification_handler.remove(filter)   
     
-    def clean_file(self) -> bool:
-        """Delete all data in the file. ATTENTION: this operation is not reversible.
-
+    def clean_file(self, return_old_file_content: bool = False) -> Union[list, None]:
+        """Clean the file, removing all the content. After the clean the file is synchronised automatically.
+        
+        ***Args:***
+        - `return_old_file_content (bool)`: If True the file content is returned. Defaults to False.
+        
         ***Returns:***
-            `bool`: True if the file is cleaned, False otherwise.
+        - `Union[list, None]`: If `return_old_file_content` is True the file content is returned, otherwise None.
+        
         """
-        pass
+        return self._modification_handler.clean_file(return_old_file_content)

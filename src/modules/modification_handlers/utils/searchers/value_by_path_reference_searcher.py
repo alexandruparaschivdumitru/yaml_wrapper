@@ -49,7 +49,7 @@ class ValueByPathReferenceSearcher:
                         return ValueByPathReferenceSearcher._search_recursion([],[], returned_value)
                     else: 
                         return ValueByPathReferenceSearcher._search_recursion([], [], item.values)
-            return ValueByPathReferenceSearcher._search_recursion([], [], item.values)   
+            return ValueByPathReferenceSearcher._search_recursion([], [], cast(Union[YamlDictionary, YamlList], {}))   
             
     
     @staticmethod

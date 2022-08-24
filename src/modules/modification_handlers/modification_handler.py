@@ -1,3 +1,4 @@
+from copy import copy
 from typing import Any, List, Union, cast
 
 from ..modification_handlers.exceptions.key_already_used_exception import KeyAlreadyUsedException
@@ -58,6 +59,36 @@ class ModificationHandler:
         
         return self._object.copy() 
     
+    def find_by_filter(self, filter: str) -> Union[YamlDictionary, YamlList]:
+        """Search an item using a filter. If the item is found returns it, otherwise raises an exception.
+
+        Args:
+            filter (str): Filter used to search the item.
+        
+        Raise:
+            FilterNotFoundException: If the item is not found.
+
+        Returns:
+            Union[YamlDictionary, YamlList]: Item found.
+        """
+        self._check_safe_load()
+        filter_splitted: list = filter.split(".")
+        try:
+            object_to_modify: Union[YamlDictionary, YamlList, None] = ValueByPathReferenceSearcher.search(filter_splitted, self._object)
+            if object_to_modify == {}:
+                raise FilterNotFoundException("The filter not produced any result.")
+        except (FilterNotFoundException, NotValidRemoveException) as error:
+            raise error
+       
+       
+        searched_object: Union[YamlDictionary, YamlList, None] = ValueByPathReferenceSearcher.search(filter_splitted, self._object)
+        if searched_object is None:
+            raise FilterNotFoundException("The filter not produced any result.")
+        
+        return copy(searched_object)
+        
+    
+    
     def check(self, filter: str, value: Union[str, int]) -> bool:
         """Checks if a value exist, using a filter to determine the position of the value.
 
@@ -111,6 +142,9 @@ class ModificationHandler:
             filter (str): Filter used to determine the position of the value.
             update_data (Union[int, str, YamlDictionary, YamlList, List[YamlDictionary], List[List[YamlDictionary]],  List[YamlList]]): Data to be updated.
 
+        Raises:
+            FilterNotFoundException: If the filter not proce any result.
+            NotValidFilterException: If the filter format is not valid.
         Returns:
             list: Copy of object with updated value.
         """
@@ -165,6 +199,26 @@ class ModificationHandler:
         self._synchroniser.synchronise(self._object.copy())
         
         return self._object.copy()
+    
+    def clean_file(self, return_file_content: bool = False) -> Union[list, None]:
+        """Cleans the file.
+
+        Args:
+            return_file_content (bool, optional): If True the file content is returned. Defaults to False.
+
+        Returns:
+            Union[list, None]: If the parameter return_file_content is True, returns the content of the file. Otherwise, returns None.
+        """
+        copy_of_object: list = self._object.copy()
+        self._object = []
+        self._synchroniser.synchronise(self._object.copy())
+        
+        self._synchroniser.synchronise(self._object.copy())
+        
+        if  return_file_content:
+            return copy_of_object
+
+        return None
     
     def _check_safe_load(self) -> None:
         if not self._loaded and self._safe_load:
