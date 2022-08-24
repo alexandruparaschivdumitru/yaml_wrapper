@@ -1,4 +1,3 @@
-from tkinter import Y
 from typing import  List, Union
 
 from ..modules.modification_handlers.exceptions.filter_not_found_exception import FilterNotFoundException
