@@ -30,7 +30,7 @@ The core functionalities provided by `YamlWrapper` work with `YamlDictionary` an
        sub_key_1: "sub_value"
        sub_key_2: 1
 ```
-I rappresented by:
+Is rappresented by:
 ```python
   data = [
             YamlDictionary("key", "value"),
@@ -48,7 +48,7 @@ I rappresented by:
 - "third_value"
 ```
 
-I rappresented by:
+Is rappresented by:
 ```python
   data = [
             YamlList(["first_value", "second_value", "third_value"])
@@ -61,7 +61,7 @@ I rappresented by:
       - "second_value"
       - "third_value"
 ```
-I rappresented by:
+Is rappresented by:
 ```python
   data = [  
             YamlDictionary("key", YamlList(["first_value", "second_value", "third_value"]))
