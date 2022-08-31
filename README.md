@@ -1,4 +1,4 @@
-# YamlWrapper
+# PythonYamlWrapper
 ![GitHub](https://img.shields.io/github/license/alexandruparaschivdumitru/yaml_wrapper?style=for-the-badge)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/alexandruparaschivdumitru/yaml_wrapper?style=for-the-badge)
 ![GitHub top language](https://img.shields.io/github/languages/top/alexandruparaschivdumitru/yaml_wrapper?style=for-the-badge)
@@ -23,7 +23,7 @@ You can find the official documentation at this [link](https://alexandruparaschi
 ```
 ## Abstract data types and examples
 The core functionalities provided by `YamlWrapper` work with `YamlDictionary` and `YamlList`. 
-- Dictionary
+- **Dictionary**
 ```yaml
     key_1: "value"
     key_2:
@@ -41,7 +41,7 @@ Is rappresented by:
   
          ]
 ```
-- Lists
+- **Lists**
 ```yaml
 - "first_value"
 - "second_value"
@@ -54,7 +54,7 @@ Is rappresented by:
             YamlList(["first_value", "second_value", "third_value"])
          ]
 ```
-- Dictionary with list
+- **Dictionary with list**
 ```yaml
    key: 
       - "first_value"
