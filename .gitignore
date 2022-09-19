@@ -165,8 +165,10 @@ cython_debug/
 
 
 # Directory 
-
 tmp/*
+!tmp/.gitkeep
+
+
 .vscode/
 
 # End of https://www.toptal.com/developers/gitignore/api/python
