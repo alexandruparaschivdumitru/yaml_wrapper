@@ -2,6 +2,8 @@ from yaml import dump as upload_data # type: ignore
 from yaml import Dumper
 from yaml import YAMLError
 from typing import Any, List, Union, cast
+
+from .utils.dumper_with_intentation import DumperWithIndentation
 from ..translators.exceptions.rule_not_found_exception import RuleNotFoundException
 from ..translators.exceptions.writing_yaml_exception import WritingYamlException
 from ..yaml_structures.yaml_dictionary import YamlDictionary
@@ -36,7 +38,7 @@ class ToYamlTranslator:
     def _write_to_file(self, content_to_write: Union[dict, list]) -> None:
         try:
             with open(self._file_path, "w") as file:
-                upload_data(content_to_write, file, Dumper)
+                upload_data(content_to_write, file, DumperWithIndentation)
         except YAMLError:
             raise WritingYamlException("Error writing the content to the yaml file.")
         
